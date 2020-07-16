@@ -50,8 +50,8 @@ public class RenderController {
 
     @RequiresAuthentication
     @GetMapping(value = {"", "/index"})
-    public ModelAndView home() {
-        return ResultUtil.view("index");
+    public String home() {
+        return "index";
     }
 
     @RequiresPermissions("users")

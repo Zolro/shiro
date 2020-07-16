@@ -19,7 +19,6 @@
  */
 package com.zyd.shiro.controller;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zyd.shiro.business.entity.Resources;
 import com.zyd.shiro.business.enums.ResponseStatus;

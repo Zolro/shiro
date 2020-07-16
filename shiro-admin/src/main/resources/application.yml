@@ -1,6 +1,6 @@
 # Server settings
 server:
-    port: 8080
+    port: 80
     # HTTP请求和响应头的最大量，以字节为单位，默认值为4096字节,超过此长度的部分不予处理,一般8K。解决java.io.EOFException: null问题
     max-http-header-size: 8192
     use-forward-headers: true
@@ -73,7 +73,7 @@ spring:
         # Redis服务器连接端口
         port: 6379
         # Redis服务器连接密码（默认为空）
-        password: qwe!@#123
+        password:
         # 连接池最大连接数（使用负值表示没有限制）
         pool:
             maxActive: 8
@@ -121,3 +121,7 @@ zyd:
         allowIps[0]:
         # 黑名单(非必填)， list
         denyIps[0]:
+
+###########################文件路径保存############################
+fileProps:
+    filePath: /static/upload

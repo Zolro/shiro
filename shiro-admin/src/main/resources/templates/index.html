@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title>次元数字档案管理平台-首页</title>
+	<link rel="stylesheet" type="text/css" href="/archives/css/index.css">
+	<link rel="stylesheet" type="text/css" href="/archives/css/css.css">
+	<link rel="stylesheet" type="text/css" href="/archives/reset.css">
+	<style type="text/css">
+
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div class="index_top">
+			<div class="index_top_left">
+				<a href="index.html" class="index_logo"></a>
+			</div>
+			<div class="index_top_right">
+				<div class="index_top_right_list">
+					<ul>
+						<li class="top_active index_top_right_list_li"><a href="">首页</a></li>
+						<li class="index_top_right_list_li"><a href="login.html" target="iframe_a">档案检索</a></li>
+						<li class="index_top_right_list_li"><a href="file.html" target="iframe_a">档案管理</a></li>
+						<li class="index_top_right_list_li"><a href="login.html" target="iframe_a">综合利用</a></li>
+						<li class="index_top_right_list_li"><a href="login.html" target="iframe_a">统计日志</a></li>
+						<li class="index_top_right_list_li"><a href="login.html" target="iframe_a">档案配置</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<iframe class="index_box" name="iframe_a" frameborder="0">
+
+		</iframe>
+	</div>
+	<script type="text/javascript" src='js/jquery-3.5.1.min.js'></script>
+	<script type="text/javascript">
+	$('.index_top_right_list_li').click(function(){
+		$('.index_top_right_list_li').removeClass("top_active");
+		$(this).addClass("top_active");
+	})
+	</script>
+</body>
+</html>	

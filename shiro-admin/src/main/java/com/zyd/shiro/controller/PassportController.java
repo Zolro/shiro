@@ -92,6 +92,6 @@ public class PassportController {
         // SecurityUtils.getSubject().logout();
         // 因为退出操作是由Shiro控制的
         redirectAttributes.addFlashAttribute("message", "您已安全退出");
-        return ResultUtil.redirect("index");
+        return ResultUtil.redirect("login");
     }
 }
