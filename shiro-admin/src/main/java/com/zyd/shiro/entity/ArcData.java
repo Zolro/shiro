@@ -69,10 +69,10 @@ public class ArcData extends AbstractDO {//文件
     private String file58;
     private String file59;
     private String file60;
-    private boolean openState;//0 正常 1隐藏
+    private Boolean openState;//0 正常 1隐藏
     private String filePath;
-    private long titleId;//对应标题目录
-    private long parDataId;
+    private Long titleId;//对应标题目录
+    private Long parDataId;
     private String searchString;
 
 }

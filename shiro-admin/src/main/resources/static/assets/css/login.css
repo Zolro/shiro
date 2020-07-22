@@ -1,10 +1,10 @@
 .box{position: absolute;left: 0;top: 0;width: 100%;height: 100%;background: url('../images/login_bg.jpg') no-repeat;background-size: cover; }
-.login_right{width: 614px;height: 100%;background: #fff;float: right;position: relative;}
+.login_right{width: 614px;height: 100%;background: #fff;right: 0;position: absolute;}
 .title{width: 378px;height: 92px;background: url('../images/login_title.png') no-repeat; background-size:378px 92px;position: absolute;top: 100px;left: 60px;}
 .login_box{position: absolute;left: 60px;top: 300px;}
 .user_box{width: 500px;height: 50px;border-bottom: 1px solid #d9d9d9;background: url('../images/user_img.png') no-repeat;background-size: 29px 30px;background-position: 10px 10px; }
-.user_box input	{width: 450px;height: 50px;border:0;float: right;font-size: 18px;}
+.user_box input	{width: 450px;height: 47px;border:0;float: right;font-size: 18px;}
 
 .password_box{width: 500px;height: 50px;border-bottom: 1px solid #d9d9d9;background: url('../images/password_img.png') no-repeat;background-size: 25px 30px;background-position: 10px 10px;margin-top: 40px; }
-.password_box input	{width: 450px;height: 50px;border:0;float: right;font-size: 18px;}
+.password_box input	{width: 450px;height: 47px;border:0;float: right;font-size: 18px;}
 .login_btn{width: 498px;height: 66px;background: url('../images/login_btn.png') no-repeat 100%;position: absolute;bottom: 100px;left: 58px;}

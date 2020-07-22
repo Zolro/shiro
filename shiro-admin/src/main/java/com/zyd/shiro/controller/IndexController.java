@@ -18,4 +18,9 @@ public class IndexController {
         return "dire";
     }
 
+    @RequestMapping(value = "/arcManger")
+    public String arcManger() {
+        return "/dire";
+    }
+
 }

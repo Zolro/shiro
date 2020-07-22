@@ -18,9 +18,7 @@ import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @Classname WxUserServiceImpl
@@ -74,12 +72,13 @@ public class ArcDataServiceImpl implements ArcDataService {
                 Optional<String> file3Opt = Optional.ofNullable(arcData.getFile3());
                 if(file3Opt.isPresent()){
                     WeekendSqls<ArcData> sqls = WeekendSqls.<ArcData>custom().andEqualTo(ArcData::getFile3,arcData.getFile3());
-                    Optional<ArcData> recDataOpt = Optional.ofNullable(arcDataMapper.selectOneByExample(Example.builder(ArcData.class).where(sqls)));
+                    Optional<ArcData> recDataOpt = Optional.ofNullable(arcDataMapper.selectOneByExample(Example.builder(ArcData.class).where(sqls).build()));
                     if(!recDataOpt.isPresent()){
                         ArcData parData = arcData;
                         parData.setTitleId(arcTitleId);
                         parData.setFile4(null);
-                        parDataId = arcDataMapper.insert(parData);
+                        arcDataMapper.insertSelective(parData);
+                        parDataId =parData.getId();
                     }else{
                         parDataId = recDataOpt.get().getId();
                     }
@@ -91,7 +90,7 @@ public class ArcDataServiceImpl implements ArcDataService {
                     arcData.setFile3(null);
                     arcData.setParDataId(parDataId);
                     arcData.setTitleId(arcTitleId);
-                    arcDataMapper.insert(arcData);
+                    arcDataMapper.insertSelective(arcData);
                 }
             }
 
@@ -102,7 +101,7 @@ public class ArcDataServiceImpl implements ArcDataService {
     @Override
     public Optional<ArcData> findDistinctByFile4(String file4) {
         WeekendSqls<ArcData> sqls = WeekendSqls.<ArcData>custom().andEqualTo(ArcData::getFile4,file4);
-        ArcData arcData = arcDataMapper.selectOneByExample(Example.builder(ArcData.class).where(sqls));
+        ArcData arcData = arcDataMapper.selectOneByExample(Example.builder(ArcData.class).where(sqls).build());
         return Optional.ofNullable(arcData);
     }
 
@@ -115,16 +114,19 @@ public class ArcDataServiceImpl implements ArcDataService {
         }else{
             arcDataIPage = arcDataMapper.selectByDireAndKeyAnd(id,params);
         }
-        PageInfo<ArcData> pageInfo = new PageInfo(arcDataIPage);
-        return pageInfo;
+
+        return new PageInfo(arcDataIPage);
     }
 
     @Override
     public PageInfo<ArcData> selectPageByTitleId( long titleId, String param,Integer pageNum,Integer pageSize) {
         PageHelper.startPage(pageNum,pageSize);
-        List<ArcData> arcDataList = arcDataMapper.selectPageByTitleId(titleId,param);
-        PageInfo<ArcData> pageInfo = new PageInfo(arcDataList);
-        return pageInfo;
+        String[] paramArr = null;
+        if(!param.equals("")){
+            paramArr= param.split("\\s+");
+        }
+        List<ArcData> arcDataList = arcDataMapper.selectPageByTitleId(titleId,paramArr);
+        return new PageInfo(arcDataList);
     }
 
     @Override
@@ -136,6 +138,30 @@ public class ArcDataServiceImpl implements ArcDataService {
     @Override
     public List<DateStatVo> countByDate() {
         return arcDataMapper.countByDate();
+    }
+
+    @Override
+    public Map<String, Integer> countData() {
+        Map<String,Integer> map =new HashMap<>();
+        int fileNum = arcDataMapper.countFile();
+        WeekendSqls<ArcData> sqlsele = WeekendSqls.<ArcData>custom().andIsNotNull(ArcData::getFilePath);
+        int eleNum = arcDataMapper.selectCountByExample(Example.builder(ArcData.class).where(sqlsele).build());
+        int caseNum = arcDataMapper.countCase();
+        map.put("file",fileNum);
+        map.put("ele",eleNum);
+        map.put("case",caseNum);
+        return map;
+    }
+
+    @Override
+    public PageInfo<ArcData> selectCaseByDataId(long dataId, String param, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        String[] paramArr = null;
+        if(!param.equals("")){
+            paramArr= param.split("\\s+");
+        }
+        List<ArcData> arcDataList = arcDataMapper.selectCaseByDataId(dataId,paramArr);
+        return new PageInfo(arcDataList);
     }
 
 

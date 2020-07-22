@@ -6,7 +6,6 @@ import com.zyd.shiro.framework.object.ResponseVO;
 import com.zyd.shiro.service.ArcDataService;
 import com.zyd.shiro.util.ResultUtil;
 import com.zyd.shiro.utils.FileUtils;
-import com.zyd.shiro.vo.DateStatVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +51,12 @@ public class ArcDataController {
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public ResponseVO count() {
-       return ResultUtil.success(null,arcDataService.countByDate());
+       return ResultUtil.success(null,arcDataService.countData());
     }
+    /*
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public ResponseVO count() {
+        return ResultUtil.success(null,arcDataService.countByDate());
+    }*/
+
 }

@@ -47,7 +47,7 @@ public class ArcDireServiceImpl implements ArcDireService {
 
     @Override
     public ArcDire save(ArcDire arcDire) {
-        arcDireMapper.insert(arcDire);
+        arcDireMapper.insertSelective(arcDire);
         return arcDireMapper.selectByPrimaryKey(arcDire);
     }
 

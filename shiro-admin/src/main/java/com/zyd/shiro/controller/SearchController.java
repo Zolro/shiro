@@ -31,22 +31,28 @@ public class SearchController {
     @Autowired
     private ArcTitleService arcTitleService;
 
-    @RequestMapping(value = "/full",method = RequestMethod.GET)
+    /*@RequestMapping(value = "/full",method = RequestMethod.GET)
     public ResponseVO full(@RequestParam(required = false,defaultValue = "") String param, @RequestParam(required = false,defaultValue = "") String state) {
+
         return ResultUtil.success(null, arcDireService.selectAllVo(param,state));
-    }
+    }*/
 
     @RequestMapping(value ="/dire/keys/{id}",method = RequestMethod.GET)
     public PageResult searchDireByKeys(@PathVariable(name="id") long id, @RequestParam(required = false,defaultValue = "") String param, @RequestParam(required = false,defaultValue = "1") int pageNun, @RequestParam(required = false,defaultValue = "") String state) {
         List<String> paramList = SearchUtils.paramToList(param);
         return ResultUtil.tablePage(arcDataService.selectByDireAndKey(id,paramList,state,pageNun,10));
     }
-    @RequestMapping(value ="/dire/condit/{id}",method = RequestMethod.GET)
-    public PageResult searchDireByCondit(@PathVariable(name="id") long id, @RequestParam(required = false,defaultValue = "") String param, @RequestParam(required = false,defaultValue = "1") int pageNun) {
-        ArcTitle title =arcTitleService.findAllByFileDire(id);
-        return ResultUtil.tablePage(arcDataService.selectPageByTitleId(title.getId()," 1=1 ",pageNun,10));
 
+    @RequestMapping(value ="/dire/condit/{id}",method = RequestMethod.GET)
+    public PageResult searchDireByCondit(@PathVariable(name="id") long id, @RequestParam(required = false,defaultValue = "") String param, @RequestParam(required = false,defaultValue = "1") int pageNum) {
+        ArcTitle title =arcTitleService.findAllByFileDire(id);
+        return ResultUtil.tablePage(arcDataService.selectPageByTitleId(title.getId(),param,pageNum,10));
     }
 
+    @RequestMapping(value ="/case/condit/{id}",method = RequestMethod.GET)
+    public PageResult searchCaseByCondit(@PathVariable(name="id") long id, @RequestParam(required = false,defaultValue = "") String param, @RequestParam(required = false,defaultValue = "1") int pageNum) {
+        return ResultUtil.tablePage(arcDataService.selectPageByTitleId(id,param,pageNum,10));
+    }
 
+    
 }

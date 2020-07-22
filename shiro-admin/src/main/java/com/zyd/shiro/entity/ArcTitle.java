@@ -69,9 +69,10 @@ public class ArcTitle extends AbstractDO {//文件标题
     private String file58;
     private String file59;
     private String file60;
-    private long fileDire;//所属目录
-    private int fileNum;//有效字段
+    private Long fileDire;//所属目录
+    private Integer fileNum;//有效字段
     private String name;
     private String searchString;
+
 
 }

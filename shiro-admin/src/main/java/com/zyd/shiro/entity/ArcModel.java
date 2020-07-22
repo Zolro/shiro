@@ -10,5 +10,5 @@ import lombok.EqualsAndHashCode;
 public class ArcModel extends AbstractDO {
     private String name;
     private String link;
-    private int sort;
+    private Integer sort;
 }

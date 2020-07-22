@@ -5,43 +5,32 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Shiro权限管理系统</title>
-    <link href="/assets/images/favicon.jpg" rel="shortcut icon" type="image/x-icon">
-    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/jquery-confirm/2.5.1/jquery-confirm.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/toastr.js/2.0.3/css/toastr.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/iCheck/1.0.2/skins/square/green.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/bootstrap-daterangepicker/2.1.24/daterangepicker.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/zTree.v3/3.5.29/css/metroStyle/metroStyle.min.css" rel="stylesheet">
-
-    <link href="/assets/css/zhyd.core.css" rel="stylesheet">
+    <title>次元数字档案管理平台-首页</title>
+    <link rel="stylesheet" type="text/css" href="/assets/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/css.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/file.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/css.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/page.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/search.css?v=1">
+    <script type="text/javascript" src="/assets/js/clock.js"></script>
 </head>
-<body class="nav-md">
-<div class="container body">
-    <div class="main_container">
-        <div class="col-md-3 left_col">
-            <div class="left_col scroll-view">
-                <div class="navbar nav_title" style="border: 0;">
-                    <a href="/" class="site_title"><i class="fa fa-coffee"></i> <span>Shiro权限管理系统</span></a>
-                </div>
-                <div class="clearfix"></div>
-                <div class="profile clearfix">
-                    <div class="profile_pic">
-                        <img src="/assets/images/loading.gif" alt="..." class="img-circle profile_img">
-                    </div>
-                    <div class="profile_info">
-                        <span>早上好,</span>
-                        <h2>尊敬的管理员</h2>
-                    </div>
-                </div>
-                <br />
-            <#include "/layout/sidebar.ftl"/>
+<body onload="start();">
+<div class="box">
+    <div class="index_top">
+        <div class="index_top_left">
+            <a href="/model/index" class="index_logo"></a>
+        </div>
+        <div class="index_top_right">
+            <div class="index_top_right_list">
+                <ul>
+                    <li class="top_active index_top_right_list_li"><a href="/index">首页</a></li>
+                    <li class="index_top_right_list_li"><a href="/model/index" target="iframe_a">档案检索</a></li>
+                    <li class="index_top_right_list_li"><a href="/model/manger" target="iframe_a">档案管理</a></li>
+                  <#--  <li class="index_top_right_list_li"><a href="login.html" target="iframe_a">综合利用</a></li>
+                    <li class="index_top_right_list_li"><a href="login.html" target="iframe_a">统计日志</a></li>
+                    <li class="index_top_right_list_li"><a href="login.html" target="iframe_a">档案配置</a></li>-->
+                </ul>
             </div>
         </div>
-        <#include "/layout/setting.ftl"/>
-        <div class="right_col" role="main">
+    </div>

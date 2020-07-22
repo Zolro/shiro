@@ -51,8 +51,15 @@ public class FileController {
     public ResponseVO folderImport(MultipartFile file) throws Exception {
         String fileName = file.getOriginalFilename();
         String suffix = fileName.substring(fileName.indexOf("."),fileName.length());
+        String fileDire =fileName.substring(0,fileName.indexOf("."));
+        String direStr = fileName.substring(fileName.indexOf("·")+1,fileName.length());
+        String[] direArr = direStr.split("-");
+        if(direArr.length>2){
+            return ResultUtil.error("只支持二级目录结构!");
+        }
+
         if(suffix.equals(".xlsx")||suffix.equals(".xls")){
-            String fileDire =fileName.substring(0,fileName.indexOf("."));
+            //String fileDire =fileName.substring(0,fileName.indexOf("."));
             String code = fileDire.substring(0,fileDire.indexOf("·"));
             Optional<ArcFileType> arcFileTypeOpt = arcFileTypeService.findDistinctByCode(code);
             if(!arcFileTypeOpt.isPresent()){

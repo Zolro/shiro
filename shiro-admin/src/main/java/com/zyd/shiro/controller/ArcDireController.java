@@ -1,9 +1,6 @@
 package com.zyd.shiro.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
-import com.zyd.shiro.entity.ArcData;
 import com.zyd.shiro.entity.ArcDire;
 import com.zyd.shiro.entity.ArcTitle;
 import com.zyd.shiro.framework.object.PageResult;
@@ -15,7 +12,6 @@ import com.zyd.shiro.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 
 @RestController

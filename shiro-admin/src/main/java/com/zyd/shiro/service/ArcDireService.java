@@ -21,4 +21,5 @@ public interface ArcDireService {
     List<ArcDire> findAllByParDire(long parDire);
     List<ArcDire> selectAllVo(String param, String state);
     ArcDire findById(long id);
+
 }

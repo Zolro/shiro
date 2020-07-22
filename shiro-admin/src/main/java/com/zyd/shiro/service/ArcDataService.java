@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -31,4 +32,8 @@ public interface ArcDataService {
     List<ArcData> selectListByIds(String ids);
 
     List<DateStatVo> countByDate();
+
+    Map<String,Integer> countData();
+
+    PageInfo<ArcData> selectCaseByDataId(long dataId, String param,Integer pageNum,Integer pageSize);
 }

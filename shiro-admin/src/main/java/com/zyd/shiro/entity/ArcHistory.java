@@ -9,5 +9,5 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class ArcHistory extends AbstractDO {
-    private long user;
+    private Long user;
 }

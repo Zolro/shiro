@@ -29,16 +29,20 @@ public class ArcTitleServiceImpl implements ArcTitleService {
 
     @Override
     public void save(ArcTitle arcTitle) {
-        arcTitleMapper.insert(arcTitle);
+        arcTitleMapper.insertSelective(arcTitle);
     }
 
     @Override
     public ArcTitle creTitle(Workbook work, long direId) {
+        ArcTitle arcTitle = findAllByFileDire(direId);
+        if(arcTitle!=null){
+            return arcTitle;
+        }
         Sheet sheet = work.getSheetAt(0);
         Row row = sheet.getRow(0);
-        ArcTitle arcTitle = ExcelUtils.creT(row,ArcTitle.class);
+        arcTitle = ExcelUtils.creT(row,ArcTitle.class);
         arcTitle.setFileDire(direId);
-        arcTitle.setFileNum(row.getLastCellNum());
+        arcTitle.setFileNum(new Integer(row.getLastCellNum()));
         arcTitleMapper.insert(arcTitle);
         return arcTitleMapper.selectOne(arcTitle);
     }
@@ -59,6 +63,7 @@ public class ArcTitleServiceImpl implements ArcTitleService {
 
     @Override
     public ArcTitle selectOnById(long id) {
+
         return arcTitleMapper.selectByPrimaryKey(id);
     }
 

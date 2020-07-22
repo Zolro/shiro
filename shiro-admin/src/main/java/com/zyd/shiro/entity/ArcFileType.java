@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 
+
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class ArcFileType extends AbstractDO {//档案类型
@@ -15,5 +17,7 @@ public class ArcFileType extends AbstractDO {//档案类型
     private int finisMode;//整理模式 1自动 0手动
     private String source;//档案来源
     private String remarks;//备注
-    private int sort;
+    private Integer sort;
+    private Integer type;//是否是案卷类型 0为不是 1为是
+
 }

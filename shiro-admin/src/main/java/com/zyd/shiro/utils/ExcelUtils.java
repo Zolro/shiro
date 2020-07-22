@@ -107,11 +107,11 @@ public class ExcelUtils {
             Cell cell = row.getCell(i);
             if(cell!=null){
                 String val = getCellStringValue(row.getCell(i));
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(String.valueOf(i),val);
+                //JSONObject jsonObject = new JSONObject();
+                //jsonObject.put(String.valueOf(i),val);
                 Method method = tClass.getDeclaredMethod("setFile"+i,String.class);
                 method.invoke(t,val);
-                array.add(jsonObject);
+                array.add(val);
             }
 
         }

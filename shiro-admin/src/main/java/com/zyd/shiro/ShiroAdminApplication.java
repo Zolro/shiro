@@ -35,7 +35,6 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication
 @MapperScan(basePackages = "com.zyd.shiro.mapper")
 public class ShiroAdminApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(ShiroAdminApplication.class, args);
     }
