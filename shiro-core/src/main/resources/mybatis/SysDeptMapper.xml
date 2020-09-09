@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zyd.shiro.persistence.mapper.SysDeptMapper">
+    <resultMap id="rm" type="com.zyd.shiro.persistence.beans.SysDept">
+        <result property="id" jdbcType="BIGINT" column="id"/>
+        <result property="name" jdbcType="VARCHAR" column="name"/>
+        <result property="code" jdbcType="VARCHAR" column="code"/>
+        <result property="orgId" jdbcType="BIGINT" column="org_id"/>
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+        <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+        <association property="parent" javaType="com.zyd.shiro.persistence.beans.SysOrg">
+            <result property="id" jdbcType="BIGINT" column="parent_id"/>
+            <result property="name" jdbcType="VARCHAR" column="parent_name"/>
+            <result property="code" jdbcType="VARCHAR" column="parent_code"/>
+            <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+            <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+        </association>
+    </resultMap>
+    <select id="findPageBreakByCondition" parameterType="com.zyd.shiro.business.vo.DeptConditionVO" resultMap="rm">
+        SELECT
+        s.*,
+        f.id parent_id,
+        f.`name` parent_name,
+        f.`code` parent_code
+        FROM
+        sys_dept s
+        LEFT JOIN sys_org f ON s.org_id = f.id
+        WHERE
+        1 = 1
+        <if test="keywords != null and keywords != '' ">
+            AND
+            (
+            s.name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+            s.code  LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+            )
+        </if>
+        <!-- 查询用户信息 -->
+        <if test="dept != null">
+            <if test="dept.id!=null">
+                AND s.id = #{dept.id}
+            </if>
+            <if test="dept.name!=null">
+                AND s.name = #{dept.name}
+            </if>
+            <if test="dept.code!=null">
+                AND s.code = #{dept.code}
+            </if>
+        </if>
+        GROUP BY
+        s.id
+        ORDER BY
+        s.create_time DESC
+    </select>
+
+</mapper>
+

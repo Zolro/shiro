@@ -89,6 +89,7 @@ public class ShiroServiceImpl implements ShiroService {
                 filterChainDefinitionMap.put(resources.getUrl(), permission);
             }
         }
+        System.out.println("############"+filterChainDefinitionMap.toString());
         // 本例子中并不存在什么特别关键的操作，所以直接使用user认证。如果有朋友是参考本例子的shiro开发其他安全功能（比如支付等）时，建议针对这类操作使用authc权限 by yadong.zhang
         filterChainDefinitionMap.put("/**", "user");
         return filterChainDefinitionMap;
@@ -123,6 +124,7 @@ public class ShiroServiceImpl implements ShiroService {
                 String chainDefinition = entry.getValue().trim().replace(" ", "");
                 manager.createChain(url, chainDefinition);
             }
+
         }
     }
 

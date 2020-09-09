@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 public class ArcDire extends AbstractDO {//项目
     private String code;// 档案类型
     private String name;//名称
-    private String number;//分类号
-    private Long parDire;
     private Integer sort;//排序字段
+    private Boolean whet;//是否是文件
+    private Long direId;
 }

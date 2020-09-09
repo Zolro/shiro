@@ -23,6 +23,10 @@
  */
 package com.zyd.shiro.framework.object;
 
+import com.zyd.shiro.business.annotation.FieldValue;
+import com.zyd.shiro.business.annotation.ObjectValue;
+import com.zyd.shiro.business.enums.FieldTypeEnum;
+import com.zyd.shiro.util.FieldObject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,7 +34,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -46,13 +54,16 @@ public abstract class AbstractDO implements Serializable {
      * @fieldName: serialVersionUID
      * @fieldType: long
      */
-    private static final long serialVersionUID = 5088697673359856350L;
+    private static final long serialVersionUID = 5088697673359856351L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @FieldValue(name="创建时间",type = FieldTypeEnum.DATE)
     private Date createTime;
+    @FieldValue(name="更新时间",type = FieldTypeEnum.DATE)
     private Date updateTime;
+
+
 
 }

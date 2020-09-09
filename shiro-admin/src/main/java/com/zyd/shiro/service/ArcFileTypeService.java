@@ -1,6 +1,7 @@
 package com.zyd.shiro.service;
 
 import com.zyd.shiro.entity.ArcFileType;
+import com.zyd.shiro.framework.object.ResponseVO;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +14,14 @@ import java.util.Optional;
  * @Created by King
  */
 public interface ArcFileTypeService {
-    Optional<ArcFileType> findDistinctByCode(String code);
-    ArcFileType save(ArcFileType archivesType);
+
+
+    ArcFileType save(ArcFileType fileType);
+
     List<ArcFileType> findAll();
+
+    ResponseVO delete(Long id);
+
+    ResponseVO edit(ArcFileType fileType);
 
 }

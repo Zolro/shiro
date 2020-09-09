@@ -84,7 +84,7 @@ public class SysRoleResourcesServiceImpl implements SysRoleResourcesService {
         }
         resourceMapper.insertList(sysRoleResources);
     }
-
+    
     /**
      * 根据主键字段进行删除，方法参数必须包含完整的主键属性
      *

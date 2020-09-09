@@ -16,10 +16,13 @@ server:
         basedir: /var/tmp/website-app
 # SPRING PROFILES
 spring:
+    servlet:
+        multipart:
+            max-file-size: 4000MB
+            max-request-size: 4000MB
     datasource:
-        type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/shiro?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&serverTimezone=UTC
+        url: jdbc:mysql://localhost:3306/shiro?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
         username: root
         password: root
     application:
@@ -45,8 +48,8 @@ spring:
     # HTTP ENCODING
     http:
         multipart:
-            max-file-size: 2MB
-            max-request-size: 10MB
+            max-file-size: 4000MB
+            max-request-size: 4000MB
         encoding:
             enabled: true
             charset: UTF-8
@@ -86,11 +89,13 @@ spring:
         # 连接超时时间（毫秒）
         timeout: 0
         # 默认的数据过期时间，主要用于shiro权限管理
-        expire: 2592000
+        expire: 1000
 # MyBatis
 mybatis:
     type-aliases-package: com.zyd.shiro.persistence.beans
     mapper-locations: classpath:/mybatis/*.xml
+    configuration:
+        map-underscore-to-camel-case: true
 # mapper
 mapper:
     mappers:
@@ -107,21 +112,12 @@ banner:
     charset: UTF-8
 
 ################################### 程序自定义配置 ###################################
-zyd:
-    druid:
-        # druid访问用户名（默认：zyd-druid）
-        username: zyd-druid
-        # druid访问密码（默认：zyd-druid）
-        password: zyd-druid
-        # druid访问地址（默认：/druid/*）
-        servletPath: /druid/*
-        # 启用重置功能（默认false）
-        resetEnable: false
-        # 白名单(非必填)， list
-        allowIps[0]:
-        # 黑名单(非必填)， list
-        denyIps[0]:
 
 ###########################文件路径保存############################
 fileProps:
     filePath: /static/upload
+
+shiro:
+    enabled: false
+    web:
+        enabled: false

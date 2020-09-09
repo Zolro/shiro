@@ -1,7 +1,10 @@
 package com.zyd.shiro.service;
 
+import com.zyd.shiro.entity.ArcDire;
 import com.zyd.shiro.entity.ArcTitle;
-import org.apache.poi.ss.usermodel.Workbook;
+import com.zyd.shiro.framework.object.ResponseVO;
+
+import java.util.List;
 
 
 /**
@@ -11,11 +14,8 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @Created by King
  */
 public interface ArcTitleService {
-    void save(ArcTitle arcTitle);
-    ArcTitle creTitle(Workbook work, long direId);
-    ArcTitle findAllByFileDire(long fileDire);
 
-    ArcTitle selectOnByDire(long id);
+    void saveOrUpd(String[] head,Long direId,int type);
 
-    ArcTitle selectOnById(long id);
+    ArcTitle findByDireId(long direId);
 }

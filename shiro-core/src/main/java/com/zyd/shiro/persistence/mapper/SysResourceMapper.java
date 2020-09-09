@@ -22,6 +22,7 @@ package com.zyd.shiro.persistence.mapper;
 import com.zyd.shiro.business.vo.ResourceConditionVO;
 import com.zyd.shiro.persistence.beans.SysResources;
 import com.zyd.shiro.plugin.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -63,4 +64,14 @@ public interface SysResourceMapper extends BaseMapper<SysResources> {
     List<SysResources> listMenuResourceByPid(Long pid);
 
     List<SysResources> listByUserId(Long userId);
+
+
+    @Select("<script> SELECT id FROM `sys_resources` " +
+            " WHERE " +
+            " `id` IN" +
+            " ("+
+            "SELECT resources_id FROM sys_role_resources WHERE role_id=${roleId}"+
+            ") "+
+            "</script>")
+    List<Long> listByRoleId(Long roleId);
 }

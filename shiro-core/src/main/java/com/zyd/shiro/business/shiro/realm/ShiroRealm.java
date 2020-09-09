@@ -61,6 +61,7 @@ public class ShiroRealm extends AuthorizingRealm {
     @Resource
     private SysRoleService roleService;
 
+
     /**
      * 提供账户信息返回认证信息（用户的角色信息集合）
      */
@@ -75,6 +76,7 @@ public class ShiroRealm extends AuthorizingRealm {
         if (user.getStatus() != null && UserStatusEnum.DISABLE.getCode().equals(user.getStatus())) {
             throw new LockedAccountException("帐号已被锁定，禁止登录！");
         }
+
 
         // principal参数使用用户Id，方便动态刷新用户权限
         return new SimpleAuthenticationInfo(
@@ -122,6 +124,7 @@ public class ShiroRealm extends AuthorizingRealm {
                     permissionSet.addAll(Arrays.asList(permission.trim().split(",")));
                 }
             }
+            System.err.println("########"+permissionSet.toString());
             info.setStringPermissions(permissionSet);
         }
         return info;

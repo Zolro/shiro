@@ -21,15 +21,19 @@ package com.zyd.shiro.business.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zyd.shiro.business.annotation.ObjectValue;
 import com.zyd.shiro.business.entity.Resources;
+import com.zyd.shiro.business.enums.ResourceTypeEnum;
 import com.zyd.shiro.business.service.SysResourcesService;
 import com.zyd.shiro.business.vo.ResourceConditionVO;
 import com.zyd.shiro.persistence.beans.SysResources;
 import com.zyd.shiro.persistence.mapper.SysResourceMapper;
+import com.zyd.shiro.util.FieldObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
 
@@ -66,7 +70,9 @@ public class SysResourcesServiceImpl implements SysResourcesService {
             resources.add(new Resources(r));
         }
         PageInfo bean = new PageInfo<SysResources>(sysResources);
+
         bean.setList(resources);
+
         return bean;
     }
 
@@ -170,6 +176,8 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         List<SysResources> sysResources = resourceMapper.listByUserId(userId);
         return getResources(sysResources);
     }
+
+
 
     /**
      * 保存一个实体，null的属性不会保存，会使用数据库默认值
@@ -299,5 +307,78 @@ public class SysResourcesServiceImpl implements SysResourcesService {
             resources.add(new Resources(r));
         }
         return resources;
+    }
+
+    @Override
+    public void loadNewMenu(ObjectValue objectValue, Queue<FieldObject> fieldObjects){
+        SysResources sysResources = existByCode(objectValue.code());
+        if(sysResources==null){
+            sysResources = iniMenu(objectValue.code(),objectValue.name());
+        }
+        if(objectValue.add()){
+            String name = objectValue.name()+"添加";
+            String code = objectValue.code()+":add";
+            iniButton(name,code,sysResources.getId());
+        }
+        if(objectValue.batchDelete()){
+            String name = "批量删除"+objectValue.name();
+            String code = objectValue.code()+":batchDelete";
+            iniButton(name,code,sysResources.getId());
+        }
+        if(objectValue.delete()){
+            String name = objectValue.name()+"删除";
+            String code = objectValue.code()+":delete";
+            iniButton(name,code,sysResources.getId());
+        }
+        if(objectValue.edit()){
+            String name = objectValue.name()+"编辑";
+            String code = objectValue.code()+":edit";
+            iniButton(name,code,sysResources.getId());
+        }
+        if(!objectValue.customize().equals("")){
+            String[] actions = objectValue.customize().split("|");
+            for(String action :actions){
+                String[] actionObj = action.split(",");
+                String name = actionObj[1];
+                String code = actionObj[0];
+                iniButton(name,code,sysResources.getId());
+            }
+        }
+    }
+    private SysResources iniMenu(String code,String name){
+        String newCode = code+"s";
+        SysResources sysResources =new SysResources();
+        sysResources.setName(name);
+        sysResources.setType(ResourceTypeEnum.menu.getInfo());
+        sysResources.setUrl("/"+newCode);
+        sysResources.setPermission(code);
+        sysResources.setSort(1);
+        sysResources.setAvailable(true);
+        sysResources.setCreateTime(new Date());
+        sysResources.setUpdateTime(new Date());
+        resourceMapper.insert(sysResources);
+        return sysResources;
+    }
+
+    private void iniButton(String name,String code,long parentId){
+        if(existByCode(code)!=null){
+            return;
+        }
+        SysResources sysResources =new SysResources();
+        sysResources.setName(name);
+        sysResources.setType(ResourceTypeEnum.button.getInfo());
+        sysResources.setPermission(code);
+        sysResources.setParentId(parentId);
+        sysResources.setSort(1);
+        sysResources.setAvailable(true);
+        sysResources.setCreateTime(new Date());
+        sysResources.setUpdateTime(new Date());
+        resourceMapper.insert(sysResources);
+    }
+
+    private SysResources existByCode(String code){
+        Example example =new Example(SysResources.class);
+        example.createCriteria().andEqualTo("permission",code);
+        return resourceMapper.selectOneByExample(example);
     }
 }

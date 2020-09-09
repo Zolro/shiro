@@ -20,12 +20,15 @@
 package com.zyd.shiro.business.service;
 
 import com.github.pagehelper.PageInfo;
+import com.zyd.shiro.business.annotation.ObjectValue;
 import com.zyd.shiro.business.entity.Resources;
 import com.zyd.shiro.business.vo.ResourceConditionVO;
 import com.zyd.shiro.framework.object.AbstractService;
+import com.zyd.shiro.util.FieldObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 /**
  * 系统资源
@@ -90,4 +93,6 @@ public interface SysResourcesService extends AbstractService<Resources, Long> {
      * @return
      */
     List<Resources> listByUserId(Long userId);
+
+    void loadNewMenu(ObjectValue annotation, Queue<FieldObject> fieldObjects);
 }

@@ -2,18 +2,19 @@ package com.zyd.shiro.service.impl;
 
 
 import com.zyd.shiro.entity.ArcDire;
-import com.zyd.shiro.mapper.ArcDataMapper;
+import com.zyd.shiro.entity.ArcFile;
+import com.zyd.shiro.entity.ArcFileType;
+import com.zyd.shiro.framework.object.ResponseVO;
 import com.zyd.shiro.mapper.ArcDireMapper;
+import com.zyd.shiro.mapper.ArcFileMapper;
 import com.zyd.shiro.service.ArcDireService;
-import com.zyd.shiro.utils.SearchUtils;
+import com.zyd.shiro.util.ResultUtil;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -25,66 +26,46 @@ import java.util.Optional;
 @Service
 public class ArcDireServiceImpl implements ArcDireService {
     @Resource
-    private ArcDireMapper arcDireMapper;
+    private ArcDireMapper direMapper;
 
-    @Resource
-    private ArcDataMapper arcDataMapper;
-
-
-    @Override
-    public Optional<ArcDire> findDistinctByNameAndParDire(String name, long parDire) {
-        WeekendSqls<ArcDire> sqls = WeekendSqls.<ArcDire>custom().andEqualTo(ArcDire::getName,name).andEqualTo(ArcDire::getParDire,parDire);
-        ArcDire arcDire = arcDireMapper.selectOneByExample(Example.builder(ArcDire.class).where(sqls).build());
-        return Optional.ofNullable(arcDire);
-    }
-
-    @Override
-    public Optional<ArcDire> findDistinctByCodeAndName(String code, String name) {
-        WeekendSqls<ArcDire> sqls = WeekendSqls.<ArcDire>custom().andEqualTo(ArcDire::getName,name).andEqualTo(ArcDire::getCode,code);
-        ArcDire arcDire = arcDireMapper.selectOneByExample(Example.builder(ArcDire.class).where(sqls).build());
-        return Optional.ofNullable(arcDire);
-    }
 
     @Override
     public ArcDire save(ArcDire arcDire) {
-        arcDireMapper.insertSelective(arcDire);
-        return arcDireMapper.selectByPrimaryKey(arcDire);
+        direMapper.insertSelective(arcDire);
+        return direMapper.selectByPrimaryKey(arcDire);
     }
 
     @Override
     public List<ArcDire> findAllByCode(String code) {
         WeekendSqls<ArcDire> sqls = WeekendSqls.<ArcDire>custom().andEqualTo(ArcDire::getCode,code);
-        List<ArcDire> arcDires = arcDireMapper.selectByExample(Example.builder(ArcDire.class).where(sqls).build());
-        return arcDires;
+        List<ArcDire> dires = direMapper.selectByExample(Example.builder(ArcDire.class).where(sqls).build());
+        return dires;
     }
 
     @Override
-    public List<ArcDire> findAllByParDire(long parDire) {
-        WeekendSqls<ArcDire> sqls = WeekendSqls.<ArcDire>custom().andEqualTo(ArcDire::getParDire,parDire);
-        List<ArcDire> arcDires = arcDireMapper.selectByExample(Example.builder(ArcDire.class).where(sqls).build());
-        return arcDires;
+    public List<ArcDire> findAllByDireId(Long direId) {
+        WeekendSqls<ArcDire> sqls = WeekendSqls.<ArcDire>custom().andEqualTo(ArcDire::getDireId,direId);
+        List<ArcDire> dires = direMapper.selectByExample(Example.builder(ArcDire.class).where(sqls).build());
+        return dires;
     }
 
+
     @Override
-    public List<ArcDire> selectAllVo(String param, String state) {
-        List<ArcDire> arcDires = new ArrayList<>();
-        List<String> params = SearchUtils.paramToList(param);
-        List<Long> titles;
-        if(state.equals("")||state.equals("0")){
-            titles = arcDataMapper.fullSearchDistinctOrTilte(params);
-        }else{
-            titles = arcDataMapper.fullSearchDistinctAndTilte(params);
+    public ResponseVO delete(Long id) {
+        ArcDire dire = direMapper.selectByPrimaryKey(id);
+        WeekendSqls<ArcFile> sqls = WeekendSqls.<ArcFile>custom().andEqualTo(ArcFile::getDireId,dire.getId());
+        int count = direMapper.selectCountByExample(Example.builder(ArcFile.class).where(sqls).build());
+        if(count>0){
+            return ResultUtil.error("该类型档案已有下属文档，无法删除！");
         }
-       if(titles.size()==0){
-           return arcDires;
-       }
-        arcDires = arcDireMapper.selectAllVo(titles);
-        return arcDires;
+        direMapper.deleteByPrimaryKey(id);
+        return  ResultUtil.success("删除成功！");
     }
 
     @Override
-    public ArcDire findById(long id) {
-        return arcDireMapper.selectByPrimaryKey(id);
+    public ResponseVO edit(ArcDire dire) {
+         direMapper.updateByPrimaryKeySelective(dire);
+        return  ResultUtil.success("修改成功！");
     }
 
 

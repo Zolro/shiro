@@ -1,6 +1,8 @@
 package com.zyd.shiro.service;
 
 
+import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,5 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Created by King
  */
 public interface FileService {
-    public void downloadMulti(String ids, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+     void downloadMulti(String ids, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
 }

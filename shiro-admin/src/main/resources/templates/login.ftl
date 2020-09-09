@@ -28,9 +28,6 @@
 </body>
 
 <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-<#--<script src="https://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="https://cdn.bootcss.com/jquery-confirm/2.5.1/jquery-confirm.min.js" type="text/javascript"></script>
-<script src="/assets/js/zyd.tool.js"></script>-->
 <script>
     $(".login_btn").click(function () {
         $.ajax({

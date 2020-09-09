@@ -1,0 +1,36 @@
+*{font-family: 'Microsoft YaHei'}
+.pop_bg{height: 100%;width: 100%;position: absolute;left: 0;top: 0;background: rgba(0, 0, 0, 0.2);}
+.pop_box{height: 600px;width: 1000px;position: absolute;left: 50%; top: 50%; transform: translate(-50%,-50%);background: #fff;}
+.pop_top{height: 30px;width: 100%;color:#fff;font-size: 16px;background: #d70c18;line-height: 30px;text-indent: 20px;font-weight:bold;}
+.pop_close{float: right;color: #fff;margin-right: 10px;font-size: 20px;}
+.pop_title{height: 20px;line-height: 20px;margin-top: 20px;border-left: 2px solid #d70c18;margin-left: 20px; text-indent: 10px;color: #d70c18;font-size: 14px;font-weight: bold;}
+.pop_mid{width: 900px;margin: 0 auto;}
+.pop_name{}
+.pop_name_left{}
+.pop_name_right input{height: 30px;}
+.pop_template{}
+.pop_template_left{}
+.pop_template_right{}
+.radio{}
+.pop_pattern{}
+.pop_pattern_left{}
+.pop_pattern_right{}
+.pop_pattern_right span{color: #d70c18;}
+.pop_source{}
+.pop_source_left{}
+.pop_source_right{}
+.pop_mark{}
+.pop_mark_left{}
+.pop_mark_right textarea{height: 80px;width:100%;text-align: left top;}
+.pop_btm{width: 900px;margin: 0 auto;}
+.pop_btm div{height: 30px;width: 60px;border-radius: 3px;line-height: 30px;text-align: center;float: right;margin-left: 5px;cursor: pointer;}
+.pop_new_btn{color: #fff;background: #d70c18;}
+.pop_close_btn{color: #d70c18;background: #fff;border: 1px solid #d70c18;}
+
+p{font-size: 14px;color: #b6b6b6;margin: 5px 0;}
+label{cursor: pointer;}
+input[type="text"]{width: 100%;margin: 0;padding: 0;line-height: 30px;}
+.pop_left{color: #666;width: 60px;text-align: right;float: left;font-size: 14px;margin-top: 8px;}
+.pop_right{width: 800px;margin-left: 30px;float: left;}
+.pop_content{margin: 20px 0;}
+.clear{clear: both;}

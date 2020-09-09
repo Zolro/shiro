@@ -39,7 +39,7 @@
 			s.password LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
 			s.email LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
 			s.qq LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
-			s.remark LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+			s.remark LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
 			)
 		</if>
 		<!-- 查询用户信息 -->

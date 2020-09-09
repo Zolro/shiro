@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zyd.shiro.persistence.mapper.SysOrgMapper">
+    <resultMap id="rm" type="com.zyd.shiro.persistence.beans.SysOrg">
+        <result property="id" jdbcType="BIGINT" column="id"/>
+        <result property="name" jdbcType="VARCHAR" column="name"/>
+        <result property="code" jdbcType="VARCHAR" column="code"/>
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+        <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+    </resultMap>
+    <resultMap id="sim" type="com.zyd.shiro.persistence.beans.SysOrg">
+        <result property="id" jdbcType="BIGINT" column="id"/>
+        <result property="name" jdbcType="VARCHAR" column="name"/>
+    </resultMap>
+    <select id="findPageBreakByCondition" parameterType="com.zyd.shiro.business.vo.OrgConditionVO" resultMap="rm">
+        SELECT
+        s.*
+        FROM
+        sys_org s
+        WHERE
+        1 = 1
+        <if test="keywords != null and keywords != '' ">
+            AND
+            (
+            s.name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+            s.code  LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+            )
+        </if>
+        <!-- 查询用户信息 -->
+        <if test="org != null">
+            <if test="org.id!=null">
+                AND s.id = #{org.id}
+            </if>
+            <if test="org.name!=null">
+                AND s.name = #{org.name}
+            </if>
+            <if test="org.code!=null">
+                AND s.code = #{org.code}
+            </if>
+        </if>
+        GROUP BY
+        s.id
+        ORDER BY
+        s.create_time DESC
+    </select>
+    <select id="simplelist" resultMap="sim">
+		SELECT
+			o.id,
+			o.name
+		FROM
+			sys_org o
+	</select>
+</mapper>
+

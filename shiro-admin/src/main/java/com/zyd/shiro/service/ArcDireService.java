@@ -1,6 +1,8 @@
 package com.zyd.shiro.service;
 
 import com.zyd.shiro.entity.ArcDire;
+import com.zyd.shiro.entity.ArcFileType;
+import com.zyd.shiro.framework.object.ResponseVO;
 import com.zyd.shiro.vo.ArcDireConditionVo;
 
 import java.util.List;
@@ -14,12 +16,15 @@ import java.util.Optional;
  * @Created by King
  */
 public interface ArcDireService {
-    Optional<ArcDire> findDistinctByNameAndParDire(String name, long parDire);
-    Optional<ArcDire> findDistinctByCodeAndName(String code, String name);
+
     ArcDire save(ArcDire arcDire);
+
     List<ArcDire> findAllByCode(String code);
-    List<ArcDire> findAllByParDire(long parDire);
-    List<ArcDire> selectAllVo(String param, String state);
-    ArcDire findById(long id);
+
+    List<ArcDire> findAllByDireId(Long direId);
+
+    ResponseVO delete(Long id);
+
+    ResponseVO edit(ArcDire dire);
 
 }

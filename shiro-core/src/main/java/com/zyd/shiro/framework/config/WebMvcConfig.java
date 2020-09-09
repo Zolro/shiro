@@ -22,8 +22,7 @@ package com.zyd.shiro.framework.config;
 import com.zyd.shiro.framework.interceptor.RememberAuthenticationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -39,9 +38,34 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private RememberAuthenticationInterceptor rememberAuthenticationInterceptor;
 
     @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE","PATCH")
+                .maxAge(3600)
+                .allowCredentials(true);
+    }
+
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(rememberAuthenticationInterceptor)
                 .excludePathPatterns("/passport/**", "/error/**", "/assets/**", "favicon.ico")
                 .addPathPatterns("/**");
+    }
+
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //获取文件的真实路径 work_project代表项目工程名 需要更改
+        String path = System.getProperty("user.dir")+"\\shiro-admin\\src\\main\\resources\\static\\upload\\";
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            registry.addResourceHandler("/upload/**").
+                    addResourceLocations("file:"+path);
+        }else{//linux和mac系统 可以根据逻辑再做处理
+            registry.addResourceHandler("/upload/**").
+                    addResourceLocations("file:"+path);
+        }
+
     }
 }

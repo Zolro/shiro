@@ -1,0 +1,15 @@
+*{font-family: 'Microsoft YaHei'}
+.upload_bg{height: 100%;width: 100%;position: absolute;left: 0;top: 0;background: rgba(0, 0, 0, 0.2);}
+.upload_box{height: 600px;width: 1000px;position: absolute;left: 50%; top: 50%; transform: translate(-50%,-50%);background: #fff;}
+.upload_top{height: 30px;width: 100%;color:#fff;font-size: 16px;background: #d70c18;line-height: 30px;text-indent: 20px;font-weight:bold;}
+.upload_close{float: right;color: #fff;margin-right: 10px;font-size: 20px;}
+.exl_name{width: 980px;margin: 0 auto;margin: 5px auto;}
+.exl_content{height: 470px;width: 980px;border: 1px solid #666;margin: 0 auto; overflow-y: scroll;margin-top: 5px;}
+.exl_content tr{height: 35px;text-align: center;font-size: 16px;line-height: 35px;}
+.exl_content tr th{width: 480px;border-bottom: 1px solid #333;border-right: 1px solid #333;}
+.exl_content tr td{width: 480px;border-bottom: 1px solid #333;border-right: 1px solid #333;}
+.exl_content tr td select{width: 478px;height: 33px;border: 0;margin: 1px;}
+.upload_btm{width: 900px;margin: 10px auto 0;}
+.upload_btm div{height: 30px;border-radius: 3px;line-height: 30px;text-align: center;float: right;margin-left: 5px;cursor: pointer;}
+.upload_new_btn{color: #fff;background: #d70c18;width: 80px;}
+.upload_close_btn{color: #d70c18;background: #fff;border: 1px solid #d70c18;width: 60px;}
