@@ -30,12 +30,15 @@ package com.zyd.shiro.controller.auth;
  */
 
 import com.zyd.shiro.util.ResultUtil;
+import com.zyd.shiro.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -48,12 +51,70 @@ import org.springframework.web.servlet.ModelAndView;
  * @since 1.0
  */
 @Controller
+@Slf4j
 public class RenderController {
 
     @RequiresAuthentication
-    @GetMapping(value = {"", "/index"})
+    @GetMapping(value = {"/", "/index"})
     public String home() {
         return "index";
+    }
+
+
+    @RequiresAuthentication
+    @GetMapping(value = "/first")
+    public String index() {
+        return "first";
+    }
+
+    @RequiresAuthentication
+    @GetMapping(value = "/manger")
+    public String manger() {
+        return "file";
+    }
+
+
+    @RequiresAuthentication
+    @GetMapping(value = "/null")
+    public String empyt() {
+        return "page/null";
+    }
+
+    @RequiresAuthentication
+    @GetMapping(value = "/biaoge")
+    public String table(Model model,String id) {
+        model.addAttribute("id",id);
+        return "page/biaoge";
+    }
+
+    @RequiresAuthentication
+    @GetMapping(value = "/featInner")
+    public String feat() {
+        return "page/feat";
+    }
+
+    /**
+     * 下载模板
+     * @return 返回excel模板
+     */
+    @RequestMapping(value = "/download/{name}", method = RequestMethod.GET, produces ="application/json;charset=UTF-8")
+    @ResponseBody
+    public Object downloadModel(@PathVariable(name="name") String name){
+        ResponseEntity<InputStreamResource> response = null;
+        try {
+            String fileName = name+".xlsx";
+            response = FileUtils.download(fileName);
+        } catch (Exception e) {
+            log.error("下载模板失败");
+        }
+        return response;
+    }
+
+
+    @RequiresAuthentication
+    @GetMapping(value = "/authority")
+    public String authority() {
+        return "feat";
     }
 
     @RequiresPermissions("users")
@@ -74,31 +135,13 @@ public class RenderController {
         return ResultUtil.view("role/list");
     }
 
-    @RequiresPermissions("searchs")
-    @GetMapping("/searchs")
-    public ModelAndView searchs() {
-        return ResultUtil.view("search/list");
-    }
 
-    @RequiresPermissions("mangers")
-    @GetMapping("/mangers")
-    public ModelAndView mangers(Model model, @RequestParam(required = false,defaultValue = "") String param) {
-        model.addAttribute("param",param);
-        return ResultUtil.view("manger/list");
-    }
 
-    @RequiresPermissions("companys")
-    @GetMapping("/companys")
-    public ModelAndView company(Model model, @RequestParam(required = false,defaultValue = "") String type) {
-        model.addAttribute("type",type);
-        return ResultUtil.view("company/list");
-    }
 
-    @RequiresPermissions("configs")
-    @GetMapping("/configs")
-    public ModelAndView config() {
-        return ResultUtil.view("config/list");
-    }
+
+
+
+
 
 
     @GetMapping("/log")
@@ -106,11 +149,6 @@ public class RenderController {
         return ResultUtil.view("log/list");
     }
 
-    @RequiresPermissions("authoritys")
-    @GetMapping("/authoritys")
-    public ModelAndView authority(Model model, @RequestParam(required = false,defaultValue = "") String type) {
-        model.addAttribute("type",type);
-        return ResultUtil.view("authority/list");
-    }
+
 
 }

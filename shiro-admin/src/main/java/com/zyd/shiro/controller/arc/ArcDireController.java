@@ -2,9 +2,11 @@ package com.zyd.shiro.controller.arc;
 
 
 import com.zyd.shiro.entity.ArcDire;
+import com.zyd.shiro.entity.ArcFile;
 import com.zyd.shiro.framework.object.ResponseVO;
 import com.zyd.shiro.service.ArcDireService;
 import com.zyd.shiro.util.ResultUtil;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,5 +31,25 @@ public class ArcDireController {
         List<ArcDire> dires = direService.findAllByDireId(direId);
         return ResultUtil.success(null,dires);
     }
+
+    @DeleteMapping(value ="/{id}")
+    public ResponseVO delete(@PathVariable(name="id") long id) {
+        return direService.delete(id);
+    }
+
+    @PutMapping
+    public ResponseVO edit(ArcDire dire) {
+        direService.edit(dire);
+        return ResultUtil.success("修改成功！");
+    }
+
+    @PostMapping
+    public ResponseVO add(ArcDire dire) {
+        direService.save(dire);
+        return ResultUtil.success("添加成功！");
+    }
+
+
+
 
 }

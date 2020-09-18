@@ -1,0 +1,394 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/layui.css" media="all">
+    <link rel="stylesheet" href="/assets/css/css.css" media="all">
+    <link rel="stylesheet" href="/assets/css/feat.css?v=2" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+
+<body>
+<div class="featBox">
+
+    <div class="layui-tab">
+
+        <ul class="layui-tab-title">
+            <li class="layui-this" shiro:hasPermission="orgs">机构管理</li>
+            <li shiro:hasPermission="depts">部门管理</li>
+            <li shiro:hasPermission="users">用户管理</li>
+            <li shiro:hasPermission="roles">角色管理</li>
+            <li shiro:hasPermission="resources" onclick="get_all_role()" >权限管理</li>
+        </ul>
+
+        <div class="layui-tab-content">
+
+
+            <div class="layui-tab-item layui-show" shiro:hasPermission="orgs" id="orgs">
+                <table class="layui-hide" id="test_one" lay-filter="test_one"></table>
+            </div>
+
+
+            <div class="layui-tab-item" shiro:hasPermission="depts" id="depts">
+                <table class="layui-hide" id="test_two" lay-filter="test_two"></table>
+            </div>
+
+
+            <div class="layui-tab-item" shiro:hasPermission="users" id="users">
+                <table class="layui-hide" id="test_three" lay-filter="test_three"></table>
+            </div>
+
+
+            <div class="layui-tab-item" shiro:hasPermission="roles" id="roles">
+                <table class="layui-hide" id="test_four" lay-filter="test_four"></table>
+            </div>
+
+
+            <div class="layui-tab-item" shiro:hasPermission="resources" id="resources">
+                <form class="layui-form" id="role_testForm_form" lay-filter="role_testForm_form">
+                    <div class="power_title">权限管理</div>
+                    <div class="power_line"></div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">选择角色</label>
+                        <div class="layui-input-inline" style="width: 120px;">
+                            <select name="user" lay-filter="role_select">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="power_content">菜单权限</div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">公共功能：</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="档案管理" title="档案管理" value="1">
+                            <input type="checkbox" name="系统配置" title="系统配置" value="2">
+                            <input type="checkbox" name="权限配置" title="权限配置" value="34">
+                        </div>
+                    </div>
+                    <div class="power_content">档案管理</div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">档案：</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="全部查看" title="显示全部" value="50">
+                            <input type="checkbox" name="上传目录" title="上传目录" value="11">
+                            <input type="checkbox" name="新增档案" title="新增档案" value="12">
+                            <input type="checkbox" name="查询档案" title="查询档案" value="20">
+                            <input type="checkbox" name="编辑档案" title="编辑档案" value="14">
+                            <input type="checkbox" name="删除档案" title="删除档案" value="13">
+                            <input type="checkbox" name="目录模板" title="目录模板" value="48">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">案卷：</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="全部查看" title="显示全部" value="51">
+                            <input type="checkbox" name="上传目录" title="上传目录" value="15">
+                            <input type="checkbox" name="批量挂接" title="批量挂接" value="19">
+                            <input type="checkbox" name="新增案卷" title="新增案卷" value="12">
+                            <input type="checkbox" name="查询案卷" title="查询案卷" value="21">
+                            <input type="checkbox" name="编辑案卷" title="编辑案卷" value="18">
+                            <input type="checkbox" name="删除案卷" title="删除案卷" value="17">
+                            <input type="checkbox" name="目录模板" title="目录模板" value="49">
+                        </div>
+                    </div>
+                    <div class="power_content">系统配置</div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">机构管理:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="机构列表" title="机构列表" value="22">
+                            <input type="checkbox" name="新增机构" title="新增机构" value="23">
+                            <input type="checkbox" name="编辑机构" title="编辑机构" value="25">
+                            <input type="checkbox" name="删除机构" title="删除机构" value="24">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">部门管理:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="部门列表" title="部门列表" value="26">
+                            <input type="checkbox" name="新增部门" title="新增部门" value="27">
+                            <input type="checkbox" name="编辑部门" title="编辑部门" value="29">
+                            <input type="checkbox" name="删除部门" title="删除部门" value="28">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">角色管理:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="角色列表" title="角色列表" value="30">
+                            <input type="checkbox" name="新增角色" title="新增角色" value="31">
+                            <input type="checkbox" name="编辑角色" title="编辑角色" value="33">
+                            <input type="checkbox" name="删除角色" title="删除角色" value="32">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户管理:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="用户列表" title="用户列表" value="4">
+                            <input type="checkbox" name="新增用户" title="新增用户" value="5">
+                            <input type="checkbox" name="编辑用户" title="编辑用户" value="7">
+                            <input type="checkbox" name="删除用户" title="删除用户" value="8">
+                            <input type="checkbox" name="修改密码" title="修改密码" value="10">
+                            <input type="checkbox" name="角色分配" title="角色分配" value="9">
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="updateNode_5">立即提交</button>
+                            <button class="layui-btn" id="resetNode_5">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!--机构管理-->
+<div id="testForm_one" class="layui-fluid" style="display: none;">
+    <form class="layui-form" id="testForm_form-one" lay-filter="testForm_form-one">
+        <input type="text" name="id" style="display:none;" class="layui-input">
+        <input type="text" name="isAddOrEdit" style="display:none;" class="layui-input">
+        <div class="layui-form-item">
+            <label class="layui-form-label">机构名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">机构代码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="code" class="layui-input" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id="updateNode_1">保存</button>
+                <button class="layui-btn" id="resetNode_1">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--部门管理-->
+<div id="testForm_two" class="layui-fluid" style="display: none;">
+    <form class="layui-form" id="testForm_form-two" lay-filter="testForm_form-two">
+        <input type="text" name="id" style="display:none;" class="layui-input">
+        <input type="text" name="isAddOrEdit" style="display:none;" class="layui-input">
+        <div class="layui-form-item">
+            <label class="layui-form-label">所在机构</label>
+            <div class="layui-input-block">
+                <select name="orgId">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门代码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="code" class="layui-input" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id="updateNode_2">保存</button>
+                <button class="layui-btn" id="resetNode_2">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--用户管理-->
+<div id="testForm_three" class="layui-fluid" style="display: none;">
+    <form class="layui-form" id="testForm_form-three" lay-filter="testForm_form-three">
+        <input type="text" name="id" style="display:none;" class="layui-input">
+        <input type="text" name="isAddOrEdit" style="display:none;" class="layui-input">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="username" title="字母开头，允许5-16字节，允许字母数字下划线" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户密码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="password" title="以字母开头，长度在6~18之间，只能包含字母、数字和下划线" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="mobile" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色类型</label>
+            <div class="layui-input-block">
+                <select name="userType">
+                    <option value=""></option>
+                    <option value="ROOT">超级管理员</option>
+                    <option value="ADMIN">管理员</option>
+                    <option value="USER">用户</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属机构</label>
+            <div class="layui-input-inline" id="testForm-three__org_cell">
+                <select name="org" id="testForm-three__org">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属部门</label>
+            <div class="layui-input-inline">
+                <select name="dept" id="testForm_three__dept" lay-ignore>
+                    <option value="">请选择机构</option>
+                </select>
+
+                <i class="layui-edge"></i>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id="updateNode_3">保存</button>
+                <button class="layui-btn" id="resetNode_3">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 用户管理之选择角色 -->
+
+<div id="testForm_three_select" class="layui-fluid" style="display: none;">
+    <form class="layui-form" id="testForm_form-three_select" lay-filter="testForm_form-three_select">
+        <input type="text" name="userId" style="display:none;" class="layui-input">
+        <div class="layui-form-item">
+            <label class="layui-form-label">赋予角色</label>
+            <div class="layui-input-block">
+                <select name="roleIds" id="three-select__role">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id="three-save__role">保存</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--角色管理-->
+<div id="testForm_four" class="layui-fluid" style="display: none;">
+    <form class="layui-form" id="testForm_form-four" lay-filter="testForm_form-four">
+        <input type="text" name="id" style="display:none;" class="layui-input">
+        <input type="text" name="isAddOrEdit" style="display:none;" class="layui-input">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色描述</label>
+            <div class="layui-input-inline">
+                <input type="text" name="description" class="layui-input" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">启用</label>
+            <div class="layui-input-block">
+                <input type="radio" name="available" value="true" title="启用">
+                <input type="radio" name="available" value="false" title="禁止">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id="updateNode_4">保存</button>
+                <button class="layui-btn" id="resetNode_4">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!--机构管理-->
+<script type="text/html" id="toolbarDemo">
+    <button class="layui-btn layui-btn-sm" lay-event="addNew_1"  shiro:hasPermission="org:add">添加</button>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit_1" shiro:hasPermission="org:edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del_1" shiro:hasPermission="org:delete">删除</a>
+</script>
+
+<!--部门管理-->
+<script type="text/html" id="toolbarDemo2">
+    <button class="layui-btn layui-btn-sm" lay-event="addNew_2" shiro:hasPermission="dept:add">添加</button>
+</script>
+<script type="text/html" id="barDemo2">
+    <a class="layui-btn layui-btn-xs" lay-event="edit_2" shiro:hasPermission="dept:edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del_2" shiro:hasPermission="dept:delete">删除</a>
+</script>
+
+<!--用户管理-->
+<script type="text/html" id="toolbarDemo3">
+    <button class="layui-btn layui-btn-sm" lay-event="addNew_3" shiro:hasPermission="user:add">添加</button>
+    <button class="layui-btn layui-btn-sm" lay-event="selectRole_3" shiro:hasPermission="user:allotRole">选择角色</button>
+</script>
+<script type="text/html" id="barDemo3">
+    <a class="layui-btn layui-btn-xs" lay-event="edit_3" shiro:hasPermission="user:edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del_3" shiro:hasPermission="user:delete">删除</a>
+</script>
+
+<!--角色管理-->
+<script type="text/html" id="toolbarDemo4">
+    <button class="layui-btn layui-btn-sm" lay-event="addNew_4" shiro:hasPermission="role:add">添加</button>
+</script>
+<script type="text/html" id="barDemo4">
+    <a class="layui-btn layui-btn-xs" lay-event="edit_4" shiro:hasPermission="role:edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del_4" shiro:hasPermission="role:delete">删除</a>
+</script>
+
+
+<script src="/assets/js/jquery-3.5.1.min.js"></script>
+<script src="/assets/js/layui.js" charset="utf-8"></script>
+<script src="/assets/js/utcToBeijing.js"></script>
+
+<!-- 注意：选项卡 依赖 element 模块，否则无法进行功能性操作 -->
+<script>
+    layui.use('element', function () {});
+</script>
+
+<script>
+    // 全局变量
+    var INDEX_OPEN;//存放layer.open的索引值
+    var INIT_DATA = {};//存放form的值
+    var form_role_5;//存放第五个表单的值
+</script>
+
+<script src="/assets/js/feat/table1.js"></script>
+<script src="/assets/js/feat/table2.js"></script>
+<script src="/assets/js/feat/table3.js"></script>
+<script src="/assets/js/feat/table4.js"></script>
+<script src="/assets/js/feat/from5.js"></script>
+
+</body>
+
+</html>

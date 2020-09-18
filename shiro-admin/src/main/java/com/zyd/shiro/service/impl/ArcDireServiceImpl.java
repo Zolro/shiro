@@ -28,6 +28,9 @@ public class ArcDireServiceImpl implements ArcDireService {
     @Resource
     private ArcDireMapper direMapper;
 
+    @Resource
+    private ArcFileMapper fileMapper;
+
 
     @Override
     public ArcDire save(ArcDire arcDire) {
@@ -38,7 +41,7 @@ public class ArcDireServiceImpl implements ArcDireService {
     @Override
     public List<ArcDire> findAllByCode(String code) {
         WeekendSqls<ArcDire> sqls = WeekendSqls.<ArcDire>custom().andEqualTo(ArcDire::getCode,code);
-        List<ArcDire> dires = direMapper.selectByExample(Example.builder(ArcDire.class).where(sqls).build());
+        List<ArcDire> dires = direMapper.selectByExample(Example.builder(ArcDire.class).where(sqls).orderBy("sort").build());
         return dires;
     }
 
@@ -52,11 +55,10 @@ public class ArcDireServiceImpl implements ArcDireService {
 
     @Override
     public ResponseVO delete(Long id) {
-        ArcDire dire = direMapper.selectByPrimaryKey(id);
-        WeekendSqls<ArcFile> sqls = WeekendSqls.<ArcFile>custom().andEqualTo(ArcFile::getDireId,dire.getId());
-        int count = direMapper.selectCountByExample(Example.builder(ArcFile.class).where(sqls).build());
+        WeekendSqls<ArcFile> sqls = WeekendSqls.<ArcFile>custom().andEqualTo(ArcFile::getDireId,id);
+        int count = fileMapper.selectCountByExample(Example.builder(ArcFile.class).where(sqls).build());
         if(count>0){
-            return ResultUtil.error("该类型档案已有下属文档，无法删除！");
+            return ResultUtil.error("该目录下已有相关文档，无法删除！");
         }
         direMapper.deleteByPrimaryKey(id);
         return  ResultUtil.success("删除成功！");
@@ -64,7 +66,7 @@ public class ArcDireServiceImpl implements ArcDireService {
 
     @Override
     public ResponseVO edit(ArcDire dire) {
-         direMapper.updateByPrimaryKeySelective(dire);
+        direMapper.updateByPrimaryKeySelective(dire);
         return  ResultUtil.success("修改成功！");
     }
 

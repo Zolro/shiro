@@ -3,8 +3,8 @@ package com.zyd.shiro.mapper;
 
 import com.zyd.shiro.entity.ArcFile;
 import com.zyd.shiro.plugin.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -113,4 +113,13 @@ public interface ArcFileMapper extends BaseMapper<ArcFile> {
             "</if>"+
             "</script>")
     long countByDireId(@Param("direId") long direId,@Param("param") String param);
+
+
+
+    @Select("<script> SELECT * FROM arc_file" +
+            " WHERE ${param} "+
+            " AND " +
+            " `type`=0 " +
+            "</script>")
+    List<ArcFile> fullSearch(@Param("param") String param);
 }

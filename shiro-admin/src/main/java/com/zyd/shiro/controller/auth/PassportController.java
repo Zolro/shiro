@@ -61,9 +61,13 @@ public class PassportController {
     @Autowired
     private ArcLogService logService;
 
-    @GetMapping("/login")
+  /* @GetMapping("/login")
     public ModelAndView login(Model model) {
         return ResultUtil.view("/login");
+    }*/
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
     /**

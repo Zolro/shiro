@@ -85,6 +85,23 @@ public class User extends AbstractBO {
         this.sysUser.setMobile(mobile);
     }
 
+    public Long getDept() {
+        return this.sysUser.getDept();
+    }
+
+    public void setDept(Long dept) {
+        this.sysUser.setDept(dept);
+    }
+
+    public Long getOrg() {
+        return this.sysUser.getOrg();
+    }
+
+    public void setOrg(Long org) {
+        this.sysUser.setOrg(org);
+    }
+
+
     public String getUsername() {
         return this.sysUser.getUsername();
     }

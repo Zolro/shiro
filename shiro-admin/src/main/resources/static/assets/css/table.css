@@ -1,0 +1,118 @@
+html, body {
+  height: 100%;
+}
+
+.container {
+  height: 100%;
+}
+
+.layui-table, .layui-table-view {
+  margin: 0;
+}
+
+.layui-table-tool-panel {
+  display: flex;
+  width: 300px;
+  flex-wrap: wrap;
+}
+
+.layui-table-tool-panel li {
+  width: 50%;
+}
+
+.layui-btn-container .demoTable .layui-btn {
+  margin-right: 0px;
+  margin-bottom: 0px;
+}
+
+.layui-btn-container .demoTable .layui-input {
+  height: 25px;
+  width: 40px;
+}
+
+/* 编辑，添加弹出框 */
+#popForm, #popForm-2, #popForm-3, #popForm-4 {
+  padding: 20px 20px 0 0;
+}
+
+#popForm .layui-form-item:not(:last-child) .layui-form-label, 
+#popForm-2 .layui-form-item:not(:last-child) .layui-form-label, 
+#popForm-3 .layui-form-item:not(:last-child) .layui-form-label, 
+#popForm-4 .layui-form-item:not(:last-child) .layui-form-label {
+  box-sizing: border-box;
+  width: 30%;
+  text-align: center;
+}
+
+
+#popForm .layui-form-item:not(:last-child) .layui-input-block, 
+#popForm-2 .layui-form-item:not(:last-child) .layui-input-block, 
+#popForm-3 .layui-form-item:not(:last-child) .layui-input-block, 
+#popForm-4 .layui-form-item:not(:last-child) .layui-input-block {
+  box-sizing: border-box;
+  float: right;
+  width: 70%;
+  margin: 0;
+}
+
+#popForm .layui-form-item:not(:last-child) .layui-input-block .layui-input, 
+#popForm .layui-form-item:not(:last-child) .layui-input-block .layui-textarea,
+#popForm-2 .layui-form-item:not(:last-child) .layui-input-block .layui-input, 
+#popForm-2 .layui-form-item:not(:last-child) .layui-input-block .layui-textarea, 
+#popForm-3 .layui-form-item:not(:last-child) .layui-input-block .layui-input, 
+#popForm-3 .layui-form-item:not(:last-child) .layui-input-block .layui-textarea,
+#popForm-4 .layui-form-item:not(:last-child) .layui-input-block .layui-input
+#popForm-4 .layui-form-item:not(:last-child) .layui-input-block .layui-textarea{
+  min-height: 38px;
+  height: auto;
+}
+
+
+/* 调整提交与重置 按钮 */
+#popForm .layui-form-item:last-child .layui-input-block, #popForm-2 .layui-form-item:last-child .layui-input-block, #popForm-3 .layui-form-item:last-child .layui-input-block, #popForm-4 .layui-form-item:last-child .layui-input-block {
+  display: flex;
+  justify-content: center;
+  margin-left: 0;
+}
+
+.custom_width_100 {
+  width: 100px;
+}
+
+.upload {
+  visibility: hidden;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.half_height {
+  height: 50%;
+}
+
+.upload_pop {
+  min-height: 200px;
+  text-align: center;
+}
+
+.upload_pop .matching td:last-child {
+  color: green;
+  padding: 5%
+}
+
+.upload_pop .Unmatched td:last-child {
+  color: red;
+  padding: 5%
+}
+
+.upload_pop .loseTableFiled td:last-child {
+  color: red;
+  padding: 5%
+}
+
+#multi_upload {
+  box-sizing: border-box;
+  position: relative;
+  height: 100%;
+  padding: 5px;
+}

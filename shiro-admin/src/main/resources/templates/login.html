@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/css/login.css">
+  <link rel="stylesheet" href="/assets/js/css/layui.css">
+  <title>次元数字档案管理平台</title>
+</head>
+
+<body>
+  <div class="center">
+    <form class="layui-form" method="post">
+      <div class="login-title">
+        <p>欢迎进入</p>
+      </div>
+      <div class="layui-form-item">
+        <div>
+          <input type="text" name="username" required lay-verify="required" placeholder="输入您的账号" autocomplete="off"
+            class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div>
+          <input type="password" name="password" required lay-verify="required" placeholder="输入您的密码" autocomplete="off"
+            class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div>
+          <button class="layui-btn login-btn" lay-submit lay-filter="formDemo">登录</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script src="/assets/js/layui.js"></script>
+  <script>
+    layui.use(['form', 'jquery','layer'], function () {
+      var form = layui.form;
+      var $ = layui.jquery;
+      var layer = layui.layer;
+      //监听提交
+      form.on('submit(formDemo)', function (data) {
+        data.rememberMe = true;
+        $.ajax({
+          url: "/passport/signin",
+          type: "POST",
+          async: false,
+          data: data.field,
+          dataType: "json",
+          success: function (rep) {
+            // console.log(rep);
+            if (rep.status === 200) {
+              sessionStorage.setItem("authToken", rep.data);
+              $(window).attr('location', '/index');
+            }else{
+              layer.msg("登陆失败！");
+            }
+
+
+          },
+          error: function (error) {
+            console.warn(error.statusText)
+          }
+        })
+        return false;
+      });
+    });
+  </script>
+</body>
+
+</html>

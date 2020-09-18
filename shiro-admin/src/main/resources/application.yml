@@ -1,7 +1,7 @@
 # Server settings
 server:
     port: 80
-    # HTTP请求和响应头的最大量，以字节为单位，默认值为4096字节,超过此长度的部分不予处理,一般8K。解决java.io.EOFException: null问题
+    #    HTTP请求和响应头的最大量，以字节为单位，默认值为4096字节,超过此长度的部分不予处理,一般8K。解决java.io.EOFException: null问题
     max-http-header-size: 8192
     use-forward-headers: true
     compression:
@@ -13,7 +13,6 @@ server:
         protocol-header: X-Forwarded-Proto
         port-header: X-Forwarded-Port
         uri-encoding: UTF-8
-        basedir: /var/tmp/website-app
 # SPRING PROFILES
 spring:
     servlet:
@@ -25,46 +24,31 @@ spring:
         url: jdbc:mysql://localhost:3306/shiro?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
         username: root
         password: root
-    application:
-        name: shiro-admin
-    freemarker:
-        allow-request-override: false
-        allow-session-override: false
+        #password: ETg&KEQ&2h39mv&e
+        application:
+            name: shiro-admin
+    thymeleaf:
         cache: false
-        charset: UTF-8
-        check-template-location: true
-        content-type: text/html
-        enabled: true
-        expose-request-attributes: false
-        expose-session-attributes: false
-        expose-spring-macro-helpers: true
-        prefer-file-system-access: true
-        suffix: .ftl
-        template-loader-path: classpath:/templates/
-        settings:
-            template_update_delay: 0
-            default_encoding: UTF-8
-            classic_compatible: true
-    # HTTP ENCODING
-    http:
-        multipart:
-            max-file-size: 4000MB
-            max-request-size: 4000MB
-        encoding:
+        # HTTP ENCODING
+        http:
+            multipart:
+                max-file-size: 4000MB
+                max-request-size: 4000MB
+            encoding:
+                enabled: true
+                charset: UTF-8
+                force: true
+        messages:
+            encoding: UTF-8
+        jmx:
             enabled: true
-            charset: UTF-8
-            force: true
-    messages:
-        encoding: UTF-8
-    jmx:
-        enabled: true
-        default-domain: agentservice
-    resources:
-        chain:
-            strategy:
-                content:
-                    enabled: true
-                    paths: /**
+            default-domain: agentservice
+        resources:
+            chain:
+                strategy:
+                    content:
+                        enabled: true
+                        paths: /**
     # redis缓存服务配置
     session:
         store-type: redis
@@ -90,12 +74,14 @@ spring:
         timeout: 0
         # 默认的数据过期时间，主要用于shiro权限管理
         expire: 1000
+
 # MyBatis
 mybatis:
     type-aliases-package: com.zyd.shiro.persistence.beans
     mapper-locations: classpath:/mybatis/*.xml
     configuration:
         map-underscore-to-camel-case: true
+    config-location:
 # mapper
 mapper:
     mappers:
@@ -112,12 +98,21 @@ banner:
     charset: UTF-8
 
 ################################### 程序自定义配置 ###################################
+zyd:
+    druid:
+        # druid访问用户名（默认：zyd-druid）
+        username: cykj-druid
+        # druid访问密码（默认：zyd-druid）
+        password: cykj-druid
+        # druid访问地址（默认：/druid/*）
+        servletPath: /druid/*
+        # 启用重置功能（默认false）
+        resetEnable: false
+        # 白名单(非必填)， list
+        allowIps[0]:
+        # 黑名单(非必填)， list
+        denyIps[0]:
 
 ###########################文件路径保存############################
 fileProps:
     filePath: /static/upload
-
-shiro:
-    enabled: false
-    web:
-        enabled: false

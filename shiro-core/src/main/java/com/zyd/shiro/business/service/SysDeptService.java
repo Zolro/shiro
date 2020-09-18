@@ -25,7 +25,9 @@ import com.zyd.shiro.business.entity.Dept;
 import com.zyd.shiro.business.entity.Org;
 import com.zyd.shiro.business.vo.DeptConditionVO;
 import com.zyd.shiro.business.vo.OrgConditionVO;
+import com.zyd.shiro.business.vo.OrgSimpleVO;
 import com.zyd.shiro.framework.object.AbstractService;
+import com.zyd.shiro.persistence.beans.SysDept;
 
 import java.util.List;
 
@@ -48,9 +50,11 @@ public interface SysDeptService extends AbstractService<Dept, Long> {
      */
     PageInfo<Dept> findPageBreakByCondition(DeptConditionVO vo);
 
-    int countByOrgId(Long[] ids);
+    int countByOrgId(Long ids);
 
     int countByDeptId(Long[]deptIds);
 
     Dept getByCode(String code);
+
+    List<SysDept> listByOrgId(long orgId);
 }

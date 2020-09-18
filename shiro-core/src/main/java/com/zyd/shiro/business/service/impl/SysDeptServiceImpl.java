@@ -27,6 +27,7 @@ import com.zyd.shiro.business.service.SysDeptService;
 import com.zyd.shiro.business.service.SysOrgService;
 import com.zyd.shiro.business.vo.DeptConditionVO;
 import com.zyd.shiro.business.vo.OrgConditionVO;
+import com.zyd.shiro.business.vo.OrgSimpleVO;
 import com.zyd.shiro.persistence.beans.SysDept;
 import com.zyd.shiro.persistence.beans.SysOrg;
 import com.zyd.shiro.persistence.mapper.SysDeptMapper;
@@ -40,6 +41,7 @@ import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
+import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -194,11 +196,11 @@ public class SysDeptServiceImpl implements SysDeptService {
     }
 
     @Override
-    public int countByOrgId(Long[] ids) {
+    public int countByOrgId(Long ids) {
         Weekend<SysDept> weekend = new Weekend<>(SysDept.class);
         //关键字查询部分
         WeekendCriteria<SysDept, Object> keywordCriteria = weekend.weekendCriteria();
-        keywordCriteria.andIn(SysDept::getOrgId, Arrays.asList(ids));
+        keywordCriteria.andEqualTo(SysDept::getOrgId,ids);
         return sysDeptMapper.selectCountByExample(weekend);
     }
 
@@ -209,7 +211,6 @@ public class SysDeptServiceImpl implements SysDeptService {
         //关键字查询部分
         WeekendCriteria<SysDept, Object> keywordCriteria = weekend.weekendCriteria();
         keywordCriteria.andIn(SysDept::getOrgId,Arrays.asList(ids));
-        System.out.println(sysDeptMapper.selectCountByExample(weekend));
         return sysDeptMapper.selectCountByExample(weekend);
     }
 
@@ -223,6 +224,13 @@ public class SysDeptServiceImpl implements SysDeptService {
     public Dept getByCode(String code) {
         Dept dept = new Dept(code);
         return getOneByEntity(dept);
+    }
+
+    @Override
+    public List<SysDept> listByOrgId(long orgId) {
+        WeekendSqls<SysDept> sqls = WeekendSqls.<SysDept>custom().andEqualTo(SysDept::getOrgId,orgId);
+        List<SysDept> depts = sysDeptMapper.selectByExample(Example.builder(SysDept.class).where(sqls).build());
+        return depts;
     }
 
 }

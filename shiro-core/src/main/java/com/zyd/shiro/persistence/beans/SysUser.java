@@ -35,6 +35,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SysUser extends AbstractDO {
+    private static final long serialVersionUID = 1981442591510699193L;
     private String username;
     private String password;
     private String nickname;

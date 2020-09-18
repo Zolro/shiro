@@ -124,7 +124,7 @@ public class ShiroRealm extends AuthorizingRealm {
                     permissionSet.addAll(Arrays.asList(permission.trim().split(",")));
                 }
             }
-            System.err.println("########"+permissionSet.toString());
+            System.err.println("赋予权限########"+permissionSet.toString());
             info.setStringPermissions(permissionSet);
         }
         return info;

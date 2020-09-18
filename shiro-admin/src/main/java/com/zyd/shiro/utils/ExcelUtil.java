@@ -65,9 +65,9 @@ public class ExcelUtil<T>{
      *
      */
     @SneakyThrows
-    public List<T> dispatch(Sheet sheet, Class<T> clazz,Map<String,String> fieldMatch) {
+    public List<T> dispatch(Sheet sheet, Class<T> clazz) {
         List<T> instances = new ArrayList<>();
-        List<Map<String, String>> sheetValue = parseExcelSheet(sheet,clazz,fieldMatch);
+        List<Map<String, String>> sheetValue = parseExcelSheet(sheet,clazz);
         for (int i = 0; i < sheetValue.size(); i++) {
             Map<String, String> map = sheetValue.get(i);
             Field[] fields = clazz.getDeclaredFields();
@@ -127,18 +127,19 @@ public class ExcelUtil<T>{
      那么List<Map>就是的内容就是
      List: map1( id: 1, alarm: abcd1 ),map2(( id: 2, alarm: abcd2 ).....
      */
-    public List<Map<String, String>> parseExcelSheet(Sheet sheet, Class<T> cls,Map<String,String> fieldMatch) {
+    public List<Map<String, String>> parseExcelSheet(Sheet sheet, Class<T> cls) {
         List<Map<String, String>> result = new ArrayList<>();
         Map<String, String> rowValue = null;
         int rows = sheet.getPhysicalNumberOfRows();
-        String[] headers = getHeaderValue(sheet.getRow(0),cls,fieldMatch);
-
-
+        String[] headers = getHeaderValue(sheet.getRow(0),cls);
         for (int i = 1; i < rows; i++) {
             rowValue = new HashMap<>();
             Row row = sheet.getRow(i);
             for (int kk = 0; kk < headers.length; kk++) {
-                rowValue.put(headers[kk], String.valueOf(getCellValue(row.getCell(kk))));
+                if(null!=row.getCell(kk)){
+                    rowValue.put(headers[kk], String.valueOf(getCellValue(row.getCell(kk))));
+                }
+
             }
 
             result.add(rowValue);
@@ -212,6 +213,7 @@ public class ExcelUtil<T>{
 
     @SuppressWarnings("deprecation")
     public static Object getCellValue(Cell cell) {
+
         Object value = null;
         switch (cell.getCellType()) {
             case NUMERIC: // 数字

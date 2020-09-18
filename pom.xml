@@ -34,7 +34,7 @@
         <fastjson.version>1.2.44</fastjson.version>
         <shiro.spring.version>1.4.0</shiro.spring.version>
         <shiro.redis.version>2.4.2.1-RELEASE</shiro.redis.version>
-        <shiro.freemarker.tags.version>0.1</shiro.freemarker.tags.version>
+        <shiro.thymeleaf.extras.version>2.0.0</shiro.thymeleaf.extras.version>
     </properties>
 
     <dependencies>
@@ -57,26 +57,4 @@
     </dependencies>
 
 
-    <!--将这段放开，并指定入口，则打jar包，如果注释这一段，并在子项目web中将<packaging>jar</packaging>改成war,则打成war包-->
-    <build>
-       <!-- <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <skipTests>true</skipTests>    &lt;!&ndash;默认关掉单元测试 &ndash;&gt;
-                </configuration>
-            </plugin>
-        </plugins>-->
-    </build>
 </project>

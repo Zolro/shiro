@@ -92,17 +92,17 @@ public class RestOrgController {
 
     @RequiresPermissions(value = {"org:batchDelete", "org:delete"}, logical = Logical.OR)
     @PostMapping(value = "/remove")
-    public ResponseVO remove(Long[] ids) {
+    public ResponseVO remove(Long ids) {
         if (null == ids) {
             return ResultUtil.error(500, "请至少选择一条记录");
         }
         if(deptService.countByOrgId(ids) > 0)
             return ResultUtil.error(500, "机构下已有部门！");
 
-        for (Long id : ids) {
-            orgService.removeByPrimaryKey(id);
-        }
-        return ResultUtil.success("成功删除 [" + ids.length + "] 个机构！");
+
+            orgService.removeByPrimaryKey(ids);
+
+        return ResultUtil.success("成功删除机构！");
     }
 
     @RequiresPermissions("org:edit")

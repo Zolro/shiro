@@ -59,7 +59,6 @@ public class RestRoleController {
     @Autowired
     private ShiroService shiroService;
 
-    @RequiresPermissions("roles")
     @PostMapping("/list")
     public PageResult getAll(RoleConditionVO vo) {
         PageInfo<Role> pageInfo = roleService.findPageBreakByCondition(vo);
@@ -72,11 +71,11 @@ public class RestRoleController {
         return ResultUtil.success(null, roleService.queryRoleListWithSelected(uid));
     }
 
-    @RequiresPermissions("role:allotResource")
+    //@RequiresPermissions("role:allotResource")
     @PostMapping("/saveRoleResources")
     public ResponseVO saveRoleResources(Long roleId, String resourcesId) {
         if (StringUtils.isEmpty(roleId)) {
-            return ResultUtil.error("error");
+            return ResultUtil.error("角色获取失败");
         }
         roleResourcesService.addRoleResources(roleId, resourcesId);
         // 重新加载所有拥有roleId的用户的权限信息
@@ -93,15 +92,15 @@ public class RestRoleController {
 
     @RequiresPermissions(value = {"role:batchDelete", "role:delete"}, logical = Logical.OR)
     @PostMapping(value = "/remove")
-    public ResponseVO remove(Long[] ids) {
+    public ResponseVO remove(Long ids) {
         if (null == ids) {
             return ResultUtil.error(500, "请至少选择一条记录");
         }
-        for (Long id : ids) {
-            roleService.removeByPrimaryKey(id);
-            roleResourcesService.removeByRoleId(id);
-        }
-        return ResultUtil.success("成功删除 [" + ids.length + "] 个角色");
+
+            roleService.removeByPrimaryKey(ids);
+            roleResourcesService.removeByRoleId(ids);
+
+        return ResultUtil.success("成功删除角色");
     }
 
     @RequiresPermissions("role:edit")

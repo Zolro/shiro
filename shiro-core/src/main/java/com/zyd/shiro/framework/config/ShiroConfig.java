@@ -19,6 +19,7 @@
  */
 package com.zyd.shiro.framework.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.zyd.shiro.business.service.ShiroService;
 import com.zyd.shiro.business.shiro.credentials.RetryLimitCredentialsMatcher;
 import com.zyd.shiro.business.shiro.realm.ShiroRealm;
@@ -64,6 +65,11 @@ public class ShiroConfig {
     private ShiroService shiroService;
     @Autowired
     private RedisProperties redisProperties;
+
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
+    }
 
     @Bean
     public MethodInvokingFactoryBean methodInvokingFactoryBean(SecurityManager securityManager){
@@ -117,6 +123,7 @@ public class ShiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
         securityManager.setRealm(authRealm);
+
         securityManager.setCacheManager(redisCacheManager());
         // 自定义session管理 使用redis
         securityManager.setSessionManager(sessionManager());
@@ -194,7 +201,7 @@ public class ShiroConfig {
      * RedisSessionDAO shiro sessionDao层的实现 通过redis
      * 使用的是shiro-redis开源插件
      */
-//    @Bean
+    //@Bean
     public RedisSessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());

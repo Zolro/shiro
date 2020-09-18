@@ -27,8 +27,10 @@ import com.zyd.shiro.business.service.SysDeptService;
 import com.zyd.shiro.business.service.SysOrgService;
 import com.zyd.shiro.business.vo.DeptConditionVO;
 import com.zyd.shiro.business.vo.OrgConditionVO;
+import com.zyd.shiro.business.vo.OrgSimpleVO;
 import com.zyd.shiro.framework.object.PageResult;
 import com.zyd.shiro.framework.object.ResponseVO;
+import com.zyd.shiro.persistence.beans.SysDept;
 import com.zyd.shiro.util.ResultUtil;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,6 +39,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 用户管理
@@ -80,17 +84,17 @@ public class RestDeptController {
 
     @RequiresPermissions(value = {"dept:batchDelete", "dept:delete"}, logical = Logical.OR)
     @PostMapping(value = "/remove")
-    public ResponseVO remove(Long[] ids) {
+    public ResponseVO remove(Long ids) {
         if (null == ids) {
             return ResultUtil.error(500, "请至少选择一条记录");
         }
        /* if(deptService.countByDeptId(ids)> 0)
             return ResultUtil.error(500, "部门下已有子部门！");*/
 
-        for (Long id : ids) {
-            deptService.removeByPrimaryKey(id);
-        }
-        return ResultUtil.success("成功删除 [" + ids.length + "] 个部门！");
+
+            deptService.removeByPrimaryKey(ids);
+
+        return ResultUtil.success("成功删除部门！");
     }
 
     @RequiresPermissions("dept:edit")
@@ -109,6 +113,13 @@ public class RestDeptController {
             return ResultUtil.error("部门修改失败！");
         }
         return ResultUtil.success(ResponseStatus.SUCCESS);
+    }
+
+    @RequiresPermissions("depts")
+    @PostMapping("/org/{orgId}")
+    public ResponseVO simplelist(@PathVariable(name="orgId") long orgId) {
+        List<SysDept> list = deptService.listByOrgId(orgId);
+        return ResultUtil.success("成功",list);
     }
 
 }

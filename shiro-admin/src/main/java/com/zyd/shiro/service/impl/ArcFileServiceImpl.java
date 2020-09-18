@@ -9,6 +9,7 @@ import com.zyd.shiro.entity.ArcTitle;
 import com.zyd.shiro.framework.object.ResponseVO;
 import com.zyd.shiro.mapper.ArcFileMapper;
 import com.zyd.shiro.service.ArcFileService;
+import com.zyd.shiro.util.ResultUtil;
 import com.zyd.shiro.vo.FileConditionVO;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -39,10 +40,11 @@ public class ArcFileServiceImpl implements ArcFileService {
     }
 
     @Override
-    public void add(ArcFile file) {
+    public ArcFile add(ArcFile file) {
         file.setCreateTime(new Date());
         file.setUpdateTime(new Date());
         fileMapper.insert(file);
+        return file;
     }
     @Override
     public void edit(ArcFile file) {
@@ -93,8 +95,24 @@ public class ArcFileServiceImpl implements ArcFileService {
     }
 
     @Override
-    public void delete(long id) {
-        fileMapper.deleteByPrimaryKey(id);
+    public ResponseVO delete(long id) {
+        ArcFile file =  fileMapper.selectByPrimaryKey(id);
+        if(null==file) return ResultUtil.error("不存在主键是["+id+"]的值");
+
+        if(file.getLevelNumber()!=null){
+            fileMapper.deleteByPrimaryKey(id);
+        }else{
+            WeekendSqls<ArcFile> sqls = WeekendSqls.<ArcFile>custom().andEqualTo(ArcFile::getFileNumber,file.getFileNumber());
+            fileMapper.deleteByExample(Example.builder(ArcFile.class).where(sqls).build());
+        }
+        return ResultUtil.success("删除成功！");
+    }
+
+    @Override
+    public PageInfo<ArcFile> fullSearch(int page, int limit, String param) {
+        PageHelper.startPage(page,limit);
+        List<ArcFile> files = fileMapper.fullSearch(param);
+        return new PageInfo(files);
     }
 
 

@@ -44,7 +44,6 @@ public class Dept {
     public Dept(SysDept sysDept) {
         this.sysDept = sysDept;
     }
-
     public Dept(String code) {
         this();
         setCode(code);

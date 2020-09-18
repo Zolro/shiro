@@ -3,11 +3,14 @@ package com.zyd.shiro.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,13 +18,13 @@ import java.util.List;
 @Slf4j
 public class FileUtils {
 
-    public final static String UPLOAD_PATH_PREFIX = "static/upload/";
+    public final static String UPLOAD_PATH_PREFIX = "upload/";
     public static final String separator = File.separator;
 
 
 
     public static String createFilePath(String name) {
-        String realPath = new String(System.getProperty("user.dir")+"/shiro-admin/src/main/resources/"+ UPLOAD_PATH_PREFIX);
+        String realPath = new String(System.getProperty("user.dir")+"/"+ UPLOAD_PATH_PREFIX);
         File filePath = new File(realPath);
         if (!filePath.isDirectory()) {
             filePath.mkdirs();
@@ -29,8 +32,11 @@ public class FileUtils {
         return filePath.getAbsolutePath() + File.separator + name;
     }
 
+
+
+
     public static ResponseEntity<InputStreamResource> download(String fileName) {
-        String route = "static/upload";
+        String route = "static/model";
         String path = null;
         ResponseEntity<InputStreamResource> response = null;
         try {
@@ -38,7 +44,6 @@ public class FileUtils {
             ClassPathResource classPathResource = new ClassPathResource(path);
             InputStream inputStream = classPathResource.getInputStream();
             //File file = new File(path);
-
             HttpHeaders headers = new HttpHeaders();
             headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
             headers.add("Content-Disposition",

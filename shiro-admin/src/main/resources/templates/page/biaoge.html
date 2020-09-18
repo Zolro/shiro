@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/table.css?v=2">
+    <link rel="stylesheet" href="/assets/js/css/layui.css">
+    <title>Document</title>
+
+</head>
+
+<body>
+<div class="container">
+
+    <!-- 上表格 -->
+    <div class="half_height">
+        <table class="layui-hide" id="test" lay-filter="test"></table>
+    </div>
+
+    <!-- 下表格 -->
+    <div class="half_height">
+        <table class="layui-hide" id="test-2" lay-filter="test-2"></table>
+    </div>
+
+    <!-- 上传excel -->
+    <input type="file" class="upload" id="upload_top" onchange="importf(this,key_file_1,params_id,0)"/>
+    <input type="file" class="upload" id="upload_bottom" onchange="importf(this,key_file_2,params_id,1)"/>
+
+    <!-- 上传多文件 -->
+    <div style="position: absolute;left: -9999px;">
+        <div class="layui-upload" id="multi_upload">
+            <div >
+                <button type="button" class="layui-btn layui-btn-normal" id="multi_upload__select">批量挂接</button>
+                <button type="button" class="layui-btn" id="multi_upload__submit">开始上传</button>
+            </div>
+            <div class="layui-upload-list">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="multi_upload__List"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 上表格头部工具栏 -->
+<script type="text/html" id="toolbarDemo">
+    <div>
+        搜索：
+        <div class="layui-inline custom_width_100">
+            <input class="layui-input" name="id" id="test_Reload__input" autocomplete="off">
+        </div>
+        <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="search_Test" data-type="reload">
+            <i class="layui-icon">&#xe615;</i>
+        </button>
+        <button class="layui-btn layui-btn-sm" lay-event="showAll" shiro:hasPermission="archives">显示全部</button>
+        <button class="layui-btn layui-btn-sm" lay-event="addNew" shiro:hasPermission="archive:add">添加</button>
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="upload_top" shiro:hasPermission="archive:upload" >
+            <i class="layui-icon">&#xe67c;</i> 上传目录
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="multi_upload" shiro:hasPermission="file:upload">
+            批量挂接
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm" onclick='window.open("/download/文件目录")' shiro:hasPermission="archive:model">
+            <i class="layui-icon">&#xe67c;</i> 目录模板
+        </button>
+    </div>
+</script>
+
+<!-- 上表格行内工具栏 -->
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view" shiro:hasPermission="archive:show" >查询</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" shiro:hasPermission="archive:edit" >编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" shiro:hasPermission="archive:delete">删除</a>
+</script>
+
+<!-- 下表格头部工具栏 -->
+<script type="text/html" id="toolbarDemo-2">
+    <div>
+        搜索：
+        <div class="layui-inline custom_width_100">
+            <input class="layui-input" name="id" id="test_Reload__input_2" autocomplete="off">
+        </div>
+        <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="search_Test_2" data-type="reload">
+            <i class="layui-icon">&#xe615;</i>
+        </button>
+        <button class="layui-btn layui-btn-sm" lay-event="showAll_2" shiro:hasPermission="cases">显示全部</button>
+        <button class="layui-btn layui-btn-sm" lay-event="addNew_2" shiro:hasPermission="case:add">添加</button>
+
+        <button type="button" class="layui-btn layui-btn-sm" onclick='javascript:$("#upload_bottom").click();' shiro:hasPermission="case:upload">
+            <i class="layui-icon">&#xe67c;</i> 上传目录
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm" onclick='window.open("/download/案卷目录")' shiro:hasPermission="case:model">
+            <i class="layui-icon">&#xe67c;</i> 目录模板
+        </button>
+
+    </div>
+</script>
+
+<!-- 下表格行内工具栏 -->
+<script type="text/html" id="barDemo-2">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view-2" shiro:hasPermission="file:show" >查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit-2" shiro:hasPermission="case:edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del-2" shiro:hasPermission="case:delete">删除</a>
+</script>
+
+<script src="/assets/js/jquery-3.5.1.min.js"></script>
+<script src="/assets/js/tableEdit.js"></script>
+<script src="/assets/js/layui.js" charset="utf-8"></script>
+<script src="/assets/js/pdfobject.min.js"></script>
+<script src="/assets/js/xlsx.full.min.js"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+
+<script>
+    // 此为获取 应设置layui数据表格的高度
+    var body_height = $(document.body).outerHeight();
+    var layui_table_view__height = body_height / 2;
+
+</script>
+
+
+<script>
+    //多文件上传
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        var demoListView = $('#multi_upload__List')
+            , uploadListIns = upload.render({
+            elem: '#multi_upload__select'
+            , url: "/file/folder/import"
+            , accept: 'file'
+            ,exts:'pdf'
+            , multiple: true
+            , auto: false
+            , bindAction: '#multi_upload__submit'
+            , choose: function (obj) {
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                console.log(files);
+                //读取本地文件
+                obj.preview(function (index, file, result) {
+                    var tr = $(['<tr id="upload-' + index + '">'
+                        , '<td>' + file.name + '</td>'
+                        , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
+                        , '<td>等待上传</td>'
+                        , '<td>'
+                        , '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                        , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                        , '</td>'
+                        , '</tr>'].join(''));
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function () {
+                        obj.upload(index, file);
+                    });
+
+                    //删除
+                    tr.find('.demo-delete').on('click', function () {
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    demoListView.append(tr);
+                });
+            }
+            , done: function (res, index, upload) {
+                console.log(res)
+                if (res.status == 200) { //上传成功
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(3).html(''); //清空操作
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }else if(res.status == 500){
+                    layer.msg("错误!"+ res.message)
+                }
+                this.error(index, upload);
+            }
+            , error: function (index, upload) {
+                var tr = demoListView.find('tr#upload-' + index)
+                    , tds = tr.children();
+                tds.eq(2).html(`<span style="color: #FF5722;">` + "错误"+ `</span>`);
+                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+    })
+
+</script>
+
+<!-- 上表格 -->
+<script th:inline="javascript">
+
+    var params_id =  [[${id}]];
+    var current_fileNumber = "";
+     console.log(params_id);
+    layui.use(['table', 'jquery', 'layer', 'form', 'upload'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        var renderTable_top = table.render({
+            elem: '#test'
+            , url: "/file/dire/" + params_id
+            , toolbar: '#toolbarDemo'
+            , height: layui_table_view__height
+            , defaultToolbar: ['filter', 'print']
+            , id: "top_table"
+            , parseData: function (res) { //res 即为原始返回的数据
+                var result;
+                // console.log(res);
+
+                // console.log(result);
+                return {
+                    "code": 0, //解析接口状态
+                    "msg": "成功", //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows //解析数据列表
+                };
+            }
+            , cols: [ [
+                //{type: 'checkbox'}
+                {field: 'id', width: 80, title: 'ID', sort: true, hide: true}
+                , {field: 'fileNumber', width: 180, title: '档号', sort: true}
+                , {field: 'fondName', title: '全宗名称'}
+                , {field: 'fileTitle', title: '文件标题'}
+                , {field: 'categoryName', title: '分类名称', hide: true}
+                , {field: 'fileCategory', title: '档案类别', hide: true}
+                , {field: 'storagePeriodCode', title: '保管期限代码', hide: true}
+                , {field: 'secretLevel', title: '密级', hide: true}
+                , {field: 'organization', title: '组织机构', hide: true}
+                , {field: 'remarks', title: '备注', hide: true}
+                , {field: 'storageLocation', title: '存放位置', hide: true}
+                , {field: 'licenseNumber', title: '登记号', hide: true}
+                , {field: 'carriersNumber', title: '载体数量', hide: true}
+                , {field: 'fondNumber', title: '全宗号', hide: true}
+                , {field: 'filesNumber', title: '案卷号', hide: true}
+                , {field: 'boxNumber', title: '盒号', hide: true}
+                , {field: 'annex', title: '附件', hide: true}
+                , {field: 'problem', title: '问题', hide: true}
+                , {field: 'storageTime', title: '保管期限', hide: true, sort: true}
+                , {field: 'categoryNumber', title: '分类号', hide: true}
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 180}
+            ] ]
+            , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                limit: 10 //一页显示多少条
+                , limits: [5, 10, 15, 20, 25, 30]//每页条数的选择项
+                , last: "尾页" //不显示尾页
+            }
+
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'search_Test':
+                    let tr_arr = $("[lay-id='top_table'] .layui-table-body.layui-table-main tr");
+                    let search_value = $("#test_Reload__input").val();
+                    search_value = search_value.trim();
+                    // console.log(tr_arr,search_value);
+                    for (let index = 0; index < tr_arr.length; index++) {
+
+                        let text_arr = [];
+
+                        let tr_index = tr_arr.eq(index);
+
+                        for (let inner = 0; inner < tr_index.children().length; inner++) {
+                            let td_index = tr_index.children().eq(inner).text();
+                            td_index = td_index.trim();
+                            text_arr.push(td_index);
+                        }
+
+                        // console.log(text_arr);
+                        let have = false;
+                        for (let index = 0; index < text_arr.length; index++) {
+                            const text = text_arr[index];
+
+
+                            if (text.indexOf(search_value) > -1) {
+                                have = true;
+                            }
+
+                            if (index + 1 == text_arr.length && !have) {
+                                tr_index.css("display", "none")
+                            } else {
+                                tr_index.css("display", "")
+                            }
+                        }
+                    }
+
+                    break;
+                case 'showAll':
+                    layer.confirm("是否显示全部？", {icon: 3, title: '提示'},
+                        function (index) {
+                            table.reload('top_table', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                                , where: {}
+                            }, 'data');
+                            layer.close(index);
+                        }
+                    );
+
+                    break;
+                case 'addNew':
+                    let editIndex = layer.open({
+                        type: 1,
+                        title: "添加",
+                        maxmin: true,
+                        area: '600px',
+                        content: TABLE_HTML.top_add_tableEditHtml,
+                    });
+                    $(document).one('click', '#top_add_test_edit__form', function () {
+                        let d = {};
+                        let t = $('#popForm-3 [name]').serializeArray();
+                        $.each(t, function () {
+                            d[this.name] = this.value;
+                        });
+                        d.direId = params_id;
+                        d.type = 0;
+
+                        if (!d.fileNumber || !d.fileTitle) {
+                            layer.msg("档案号或文件标题不能为空！")
+                            return false;
+                        }
+                        console.log(d);
+                        $.ajax({
+                            url: "/file"
+                            , type: "POST"
+                            , data: d
+                            , success: function (rep) {
+                                console.log(rep);
+                                if (rep.status == 200) {
+                                    layer.msg("添加成功！");
+                                    table.reload('top_table', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                        , where: {}
+                                    }, 'data');
+                                    layer.close(editIndex);
+                                } else {
+                                    layer.msg("添加失败！");
+                                    console.error(rep);
+                                }
+
+                            }
+                            , error: function (error) {
+                                console.warn(error.statusText)
+                            }
+                        })
+                        return false;
+                    });
+                    $(document).one('click', '#top_add_test_edit__form_init', function () {
+                        layer.confirm('是否重置？', function (index) {
+                            // form.val("popFromId-3", initData);
+                            document.getElementById("popForm-3").reset();
+                            layer.close(index);
+                        });
+                    });
+                    break;
+                case 'upload_top':
+                    console.log(1);
+                    $("#upload_top").click();
+
+                    break;
+                case 'multi_upload':
+                    layer.open({
+                        type: 1,
+                        title:"多文件上传",
+                        content: $('#multi_upload'),
+                        area: ["50%", "60%"]
+                    })
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'edit':
+                    // console.log(data);
+                    let initData = {};
+                    // 编辑框的默认值
+                    initData = {
+                        "id": data.id,
+                        "fileNumber": data.fileNumber,
+                        "fondName": data.fondName,
+                        "fileTitle": data.fileTitle,
+                        "categoryName": data.categoryName,
+                        "fileCategory": data.fileCategory,
+                        "storagePeriodCode": data.storagePeriodCode,
+                        "secretLevel": data.secretLevel,
+                        "organization": data.organization,
+                        "remarks": data.remarks,
+                        "storageLocation": data.storageLocation,
+                        "licenseNumber": data.licenseNumber,
+                        "carriersNumber": data.carriersNumber,
+                        "fondNumber": data.fondNumber,
+                        "filesNumber": data.filesNumber,
+                        "boxNumber": data.boxNumber,
+                        "annex": data.annex,
+                        "problem": data.problem,
+                        "storageTime": data.storageTime,
+                        "categoryNumber": data.categoryNumber
+                    }
+                    let editIndex = layer.open({
+                        type: 1,
+                        title: "编辑",
+                        maxmin: true,
+                        area: '600px',
+                        content: TABLE_HTML.top_tableEditHtml,
+                        success: function () {
+                            form.val("popFromId", initData);
+                        }
+                    });
+                    $(document).one('click', '#top_test_edit__form', function () {
+                        let d = {};
+                        let t = $('#popForm [name]').serializeArray();
+                        $.each(t, function () {
+                            d[this.name] = this.value;
+                        });
+                        // console.log(d);
+
+                        if (!d.fileNumber || !d.fileTitle) {
+                            layer.msg("档案号或文件标题不能为空！")
+                            return false;
+                        }
+                        $.ajax({
+                            url: "/file"
+                            , type: "PUT"
+                            , data: d
+                            , success: function (rep) {
+                                console.log(rep);
+                                if (rep.status == 200) {
+                                    layer.msg("编辑成功！");
+                                    table.reload('top_table', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                        , where: {}
+                                    }, 'data');
+                                    layer.close(editIndex);
+                                } else {
+                                    layer.msg("编辑失败！");
+                                    console.error(rep);
+                                }
+
+                            }
+                            , error: function (error) {
+                                console.warn(error.statusText)
+                            }
+                        })
+                        return false;
+                    });
+                    $(document).one('click', '#top_test_edit__form_init', function () {
+                        layer.confirm('是否重置？', function (index) {
+                            form.val("popFromId", initData);
+                            layer.close(index);
+                        });
+                    });
+                    break;
+                case 'del':
+                    layer.confirm('确认删除？', function (index) {
+                        let isCurrent = (data.fileNumber == current_fileNumber) ? true : false;
+                        $.ajax({
+                            url: "/file/" + data.id
+                            , headers: {
+                                "authToken": sessionStorage.getItem("authToken")
+                            }
+                            , type: "DELETE"
+                            , success: function (rep) {
+                                console.log(rep);
+                                if (rep.status == 200) {
+                                    layer.msg("删除成功！");
+                                    table.reload('top_table', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                        , where: {}
+                                    }, 'data');
+                                    if (isCurrent) {
+                                        table.reload('bottom_table', {
+                                             url: "/file/dire/fileNumber/" + current_fileNumber
+                                            , where: {}
+                                        }, 'data');
+                                        layer.close(index);
+                                    }
+                                } else {
+                                    layer.msg("编辑失败！");
+                                    console.error(rep);
+                                }
+
+                            }
+                            , error: function (error) {
+                                layer.msg(error);
+                                console.warn(error.statusText)
+                            }
+                        })
+                        layer.close(index);
+                    });
+                    break;
+                case 'view':
+                    current_fileNumber = data.fileNumber;
+                    table.reload('bottom_table', {
+                         url: "/file/dire/fileNumber/" + current_fileNumber
+                    }, 'data');
+                    break;
+            }
+            ;
+        });
+
+    });
+
+</script>
+
+<!-- 下表格 -->
+<script>
+    layui.use(['table', 'jquery', 'layer', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+
+        table.render({
+            elem: '#test-2'
+            , id: 'bottom_table'
+            , toolbar: '#toolbarDemo-2'
+            , loading: false
+            , height: layui_table_view__height
+            , defaultToolbar: ['filter', 'print']
+            , parseData: function (res) { //res 即为原始返回的数据
+                console.log(res);
+                return {
+                    "code": 0, //解析接口状态
+                    "msg": "成功", //解析提示文本
+                    "count": res.length, //解析数据长度
+                    "data": res || [] //解析数据列表
+                };
+            }
+            , cols: [ [
+                {field: 'id', width: 80, title: 'ID', sort: true, hide: true}
+                , {field: 'levelNumber', width: 180, title: '文件级档号', sort: true}
+                , {field: 'categoryName', title: '分类名称', hide: true}
+                , {field: 'fileCategory', title: '档案类别', hide: true}
+                , {field: 'fondName', title: '全宗名称', hide: true}
+                , {field: 'storagePeriodCode', title: '保管期限代码', hide: true}
+                , {field: 'secretLevel', title: '密级', hide: true}
+                , {field: 'fileTitle', title: '文件标题'}
+                , {field: 'organization', title: '组织机构', hide: true}
+                , {field: 'remarks', title: '备注', hide: true}
+                , {field: 'fondNumber', title: '全宗号', hide: true}
+                , {field: 'filesNumber', title: '案卷号', hide: true}
+                , {field: 'person', width: 180, title: '责任者'}
+                , {field: 'annex', title: '附件', hide: true}
+                , {field: 'pageNumber', title: '张页号', hide: true}
+                , {field: 'problem', title: '问题', hide: true}
+                , {field: 'storageTime', title: '保管期限', hide: true, sort: true}
+                , {field: 'note', title: '附注', hide: true}
+                , {field: 'volumeNumber', title: '卷内顺序号', hide: true}
+                , {field: 'categoryNumber', title: '分类号', hide: true}
+                , {field: 'writingDate', title: '成文日期', sort: true}
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo-2', width: 180}
+            ] ]
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test-2)', function (obj) {
+            switch (obj.event) {
+                case 'search_Test_2':
+                    let tr_arr = $("[lay-id='bottom_table'] .layui-table-body.layui-table-main tr");
+                    let search_value = $("#test_Reload__input_2").val();
+                    search_value = search_value.trim();
+                    // console.log(tr_arr,search_value);
+                    for (let index = 0; index < tr_arr.length; index++) {
+
+                        let text_arr = [];
+
+                        let tr_index = tr_arr.eq(index);
+
+                        for (let inner = 0; inner < tr_index.children().length; inner++) {
+                            let td_index = tr_index.children().eq(inner).text();
+                            td_index = td_index.trim();
+                            text_arr.push(td_index);
+                        }
+
+                        // console.log(text_arr);
+                        let have = false;
+                        for (let index = 0; index < text_arr.length; index++) {
+                            const text = text_arr[index];
+
+
+                            if (text.indexOf(search_value) > -1) {
+                                have = true;
+                            }
+
+                            if (index + 1 == text_arr.length && !have) {
+                                tr_index.css("display", "none")
+                            } else {
+                                tr_index.css("display", "")
+                            }
+                        }
+                    }
+                    break;
+                case 'showAll_2':
+                    layer.confirm("是否显示全部？", {icon: 3, title: '提示'},
+                        function (index) {
+                            table.reload('bottom_table', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                                , url: "/file/dire/fileNumber/" + current_fileNumber
+                                , where: {}
+                            }, 'data');
+                        }
+                    );
+                    break;
+                case 'addNew_2':
+                    let editIndex = layer.open({
+                        type: 1,
+                        title: "添加",
+                        maxmin: true,
+                        area: '600px',
+                        content: TABLE_HTML.bottom_add_tableEditHtml,
+                    });
+                    $(document).one('click', '#bottom_add_test_edit__form', function () {
+                        let d = {};
+                        let t = $('#popForm-4 [name]').serializeArray();
+                        $.each(t, function () {
+                            d[this.name] = this.value;
+                            if (d[this.name] == "") {
+                                delete d[this.name];
+                            }
+                        });
+                        d.fileNumber = current_fileNumber;
+                        d.type = 1;
+                        // console.log(d);
+
+                        if (!d.levelNumber || !d.fileTitle) {
+                            layer.msg("文件级档案号或文件标题不能为空！")
+                            return false;
+                        }
+
+                        $.ajax({
+                            url: "/file"
+                            , type: "POST"
+                            , data: d
+                            , success: function (rep) {
+                                console.log(rep);
+                                if (rep.status == 200) {
+                                    layer.msg("添加成功！");
+                                    table.reload('bottom_table', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                        , url: "/file/dire/fileNumber/" + current_fileNumber
+                                        , where: {}
+                                    }, 'data');
+                                    layer.close(editIndex);
+                                    return false;
+                                } else {
+                                    layer.msg("添加失败！");
+                                    console.error(rep);
+                                    return false;
+                                }
+
+                            }
+                            , error: function (error) {
+                                console.warn(error.statusText)
+                            }
+                        })
+                        return false;
+                    });
+                    $(document).one('click', '#bottom_add_test_edit__form_init', function () {
+                        layer.confirm('是否重置？', function (index) {
+                            // form.val("popFromId-3", initData);
+                            document.getElementById("popForm-4").reset();
+                            layer.close(index);
+                        });
+                    });
+                    break;
+            }
+        });
+
+
+        //监听行工具事件
+        table.on('tool(test-2)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'edit-2':
+                    // console.log(data);
+                    let initData = {};
+                    // 编辑框的默认值
+                    initData = {
+                        "id": data.id,
+                        "levelNumber": data.levelNumber,
+                        "categoryName": data.categoryName,
+                        "fileCategory": data.fileCategory,
+                        "fondName": data.fondName,
+                        "storagePeriodCode": data.storagePeriodCode,
+                        "secretLevel": data.secretLevel,
+                        "fileTitle": data.fileTitle,
+                        "organization": data.organization,
+                        "remarks": data.remarks,
+                        "fondNumber": data.fondNumber,
+                        "filesNumber": data.filesNumber,
+                        "person": data.person,
+                        "annex": data.annex,
+                        "pageNumber": data.pageNumber,
+                        "problem": data.problem,
+                        "storageTime": data.storageTime,
+                        "note": data.note,
+                        "volumeNumber": data.volumeNumber,
+                        "categoryNumber": data.categoryNumber,
+                        "writingDate": data.writingDate
+                    }
+                    let bottom_editIndex = layer.open({
+                        type: 1,
+                        title: "编辑",
+                        maxmin: true,
+                        area: '600px',
+                        content: TABLE_HTML.bottom_tableEditHtml,
+                        success: function () {
+                            form.val("popFromId-2", initData);
+                        }
+                    });
+                    $(document).one('click', '#bottom_test_edit__form', function () {
+                        let d = {};
+                        let t = $('#popForm-2 [name]').serializeArray();
+                        $.each(t, function () {
+                            d[this.name] = this.value;
+                        });
+                        // console.log(d);
+
+                        if (!d.levelNumber || !d.fileTitle) {
+                            layer.msg("文件级档案号或文件标题不能为空！")
+                            return false;
+                        }
+                        $.ajax({
+                            url: "/file"
+                            , type: "PUT"
+                            , data: d
+                            , success: function (rep) {
+                                console.log(rep);
+                                if (rep.status == 200) {
+                                    layer.msg("编辑成功！");
+                                    table.reload('bottom_table', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                        , url: "/file/dire/fileNumber/" + current_fileNumber
+                                        , where: {}
+                                    }, 'data');
+                                    layer.close(bottom_editIndex);
+                                } else {
+                                    layer.msg("编辑失败！");
+                                    console.error(rep);
+                                }
+
+                            }
+                            , error: function (error) {
+                                console.warn(error.statusText)
+                            }
+                        })
+
+                        return false;
+                    });
+                    $(document).one('click', '#bottom_test_edit__form_init', function () {
+                        layer.confirm('是否重置？', function (index) {
+                            form.val("popFromId-2", initData);
+                            layer.close(index);
+                        });
+                    });
+                    break;
+                case 'del-2':
+                    layer.confirm('确认删除？', function (index) {
+
+                        $.ajax({
+                            url: "/file/" + data.id
+                            , type: "DELETE"
+                            , success: function (rep) {
+                                console.log(rep);
+                                if (rep.status == 200) {
+                                    layer.msg("删除成功！");
+
+
+                                    table.reload('bottom_table', {
+                                        url: "/file/dire/fileNumber/" + current_fileNumber
+                                        , where: {}
+                                    }, 'data');
+                                    layer.close(index);
+
+                                } else {
+                                    layer.msg("编辑失败！");
+                                    console.error(rep);
+                                }
+
+                            }
+                            , error: function (error) {
+                                console.warn(error.statusText)
+                            }
+                        })
+                        layer.close(index);
+                    });
+                    break;
+                case 'view-2':
+                    if (!data.including) {
+                        layer.msg("无文件");
+                        return;
+                    }
+                    layer.open({
+                        type: 1,
+                        title: data.levelNumber,
+                        maxmin: true,
+                        area: ["50%", "100%"],
+                        content:
+                            `<div id="example1" style="height:100%"></div>
+                `,
+                        success: function () {
+                            PDFObject.embed(data.filePath.trim(), "#example1", {page: "1"});
+                            // PDFObject.embed("../pdf/test.pdf", "#example1", { page: "1" });
+                        }
+                    });
+                    break;
+            }
+            ;
+        });
+
+    });
+</script>
+<script>
+
+    let key_file_1 = ["档号", "全宗名称", "文件标题", "分类名称", "档案类别",
+        "保管期限代码", "密级", "组织机构", "备注", "存放位置", "登记号",
+        "载体数量", "全宗号", "案卷号", "盒号", "附件", "问题", "保管期限", "分类号"];
+
+
+    let key_file_2 = ["文件级档号", "分类名称", "档案类别", "全宗名称", "保管期限代码",
+        "密级", "文件标题", "组织机构", "备注", "全宗号", "案卷号", "责任者", "附件", "张页号",
+        "问题", "保管期限", "附注", "卷内顺序号", "分类号", "成文日期", "档号"];
+
+    var wb;//读取完成的数据
+    var rABS = false;
+    //是否将文件读取为二进制字符串
+    //是否将文件读取为二进制字符串
+    function importf(obj, key_file, direId, status) {//导入
+        if (!obj.files) {
+            return false;
+        }
+        var f = obj.files[0];
+
+        var ext = f.name.split(".")[1];
+        if (["xls","xlsx"].indexOf(ext) == -1) {
+            layer.msg("请上传excel文档！");
+            obj.outerHTML = obj.outerHTML;
+            return false;
+        }
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var data = e.target.result;
+            if (rABS) {
+                wb = XLSX.read(btoa(fixdata(data)), {//手动转化
+                    type: 'base64'
+                });
+            } else {
+                wb = XLSX.read(data, {
+                    type: 'binary'
+                });
+            }
+            var seltext = wb.SheetNames[0]//是获取Sheets中第一个Sheet的名字
+            // console.log(seltext);
+            // var objData = XLSX.utils.sheet_to_json(wb.Sheets[seltext]);
+            var worksheet = wb.Sheets[seltext];
+            var str = "";
+            for (var key in worksheet) {
+                if (key == 'A2') {
+                    break;
+                }
+                str += (key === '!ref' ? worksheet[key] : worksheet[key].v) +",";
+            }
+            var keyAry = str.split(",");
+            keyAry.pop();
+            keyAry.shift();
+            console.log(keyAry);
+            let tempData = validationData(keyAry, key_file)
+            console.log(tempData);
+            let matching = [...tempData.matching];
+            let Unmatched = [...tempData.Unmatched];
+            let loseTableFiled = [...tempData.loseTableFiled];
+
+            layui.use(['jquery', 'layer','table'], function () {
+                var $ = layui.$
+                    , transfer = layui.transfer
+                    , layer = layui.layer
+                    , util = layui.util
+                    , table = layui.table;
+                let currentIndex = layer.open({
+                    type: 1,
+                    btn: ['提交', '取消'],
+                    area: ["50%", "60%"],
+                    content: `
+              <table class="upload_pop">
+                <tr class="matching">
+                  <td width="30%">已匹配:</td>
+                  <td>${matching.join(" | ")}</td>
+                </tr>
+                <tr class="Unmatched">
+                  <td width="30%">未匹配:</td>
+                  <td>${Unmatched.join(" | ")}</td>
+                </tr>
+                <tr class="loseTableFiled">
+                  <td width="30%">缺少表头:</td>
+                  <td>${loseTableFiled.join(" | ")}</td>
+                </tr>
+              </table>
+              `,
+                    yes: function (index, layero) {
+                        if (loseTableFiled.length || Unmatched.length) {
+                            layer.msg("请调整表格！");
+                            return false;
+                        }
+                        let formData = new FormData();
+                        let file = obj.files[0];
+                        formData.append("file", file);
+                        formData.append("direId", direId);
+                        formData.append("status", status);
+                        $.ajax({
+                            type: "POST",
+                            url: "/file/import",
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            success: function (rep) {
+                                 if (rep.status == 200){
+                                     layer.msg("提交成功");
+                                     setTimeout(function () {
+                                         layer.close(currentIndex);
+
+                                         // 0代表上面的表格
+                                         if (status == 0) {
+                                             table.reload('top_table', {
+                                                 page: {
+                                                     curr: 1 //重新从第 1 页开始
+                                                 }
+                                                 , where: {}
+                                             }, 'data');
+                                         } else {
+                                             table.reload('bottom_table', {
+                                                 url: "/file/dire/fileNumber/" + current_fileNumber?current_fileNumber:""
+                                             }, 'data');
+                                         }
+
+
+                                     }, 1000)
+                                     // console.log($(obj));
+                                     obj.outerHTML = obj.outerHTML;
+                                     return false;
+                                 }else if(rep.status == 500){
+                                     layer.msg("提交失败!"+ rep.message);
+                                     return false;
+                                 }
+
+
+                            },
+                            error:function (error) {
+                                layer.msg(error);
+                                obj.outerHTML = obj.outerHTML;
+                            }
+                        });
+
+                        return false;
+                    }
+                });
+            })
+        }
+        if (rABS) {
+            reader.readAsArrayBuffer(f);
+        } else {
+            reader.readAsBinaryString(f);
+        }
+
+        function fixdata(data) {
+            //文件流转BinaryString
+            var o = "",
+                l = 0,
+                w = 10240;
+            for (; l < data.byteLength / w; ++l)
+                o += String.fromCharCode.apply(null,
+                    new Uint8Array(data.slice(l * w, l * w + w)));
+            o += String.fromCharCode.apply(null,
+                new Uint8Array(data.slice(l * w)));
+            return o;
+        }
+    }
+
+    function validationData(keyAry, key_file) {
+        let Unmatched = [];
+        let matching = [];
+        for (let index = 0; index < keyAry.length; index++) {
+            const title = keyAry[index];
+
+            if (key_file.indexOf(title) > -1) {
+                matching.push(title);
+            } else {
+                Unmatched.push(title)
+            }
+        }
+        let loseTableFiled = [];
+        for (let index = 0; index < key_file.length; index++) {
+            const element = key_file[index];
+            if (matching.indexOf(element) == -1) {
+                loseTableFiled.push(element);
+            }
+        }
+        return {
+            "Unmatched": Unmatched,
+            "matching": matching,
+            "loseTableFiled": loseTableFiled
+        }
+    }
+    function uploadModel() {
+        
+    }
+
+</script>
+
+</body>
+
+</html>

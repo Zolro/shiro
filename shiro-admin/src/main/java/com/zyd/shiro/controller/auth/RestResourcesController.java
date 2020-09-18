@@ -61,7 +61,7 @@ public class RestResourcesController {
         return ResultUtil.tablePage(pageInfo);
     }
 
-    @RequiresPermissions("role:allotResource")
+    //@RequiresPermissions("role:allotResource")
     @PostMapping("/resourcesWithSelected")
     public ResponseVO resourcesWithSelected(Long rid) {
         return ResultUtil.success(null, resourcesService.queryResourcesListWithSelected(rid));
@@ -85,7 +85,6 @@ public class RestResourcesController {
         for (Long id : ids) {
             resourcesService.removeByPrimaryKey(id);
         }
-
         //更新权限
         shiroService.updatePermission();
         return ResultUtil.success("成功删除 [" + ids.length + "] 个资源");

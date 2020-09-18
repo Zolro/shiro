@@ -5,22 +5,8 @@
 .pop_close{float: right;color: #fff;margin-right: 10px;font-size: 20px;}
 .pop_title{height: 20px;line-height: 20px;margin-top: 20px;border-left: 2px solid #d70c18;margin-left: 20px; text-indent: 10px;color: #d70c18;font-size: 14px;font-weight: bold;}
 .pop_mid{width: 900px;margin: 0 auto;}
-.pop_name{}
-.pop_name_left{}
 .pop_name_right input{height: 30px;}
-.pop_template{}
-.pop_template_left{}
-.pop_template_right{}
-.radio{}
-.pop_pattern{}
-.pop_pattern_left{}
-.pop_pattern_right{}
 .pop_pattern_right span{color: #d70c18;}
-.pop_source{}
-.pop_source_left{}
-.pop_source_right{}
-.pop_mark{}
-.pop_mark_left{}
 .pop_mark_right textarea{height: 80px;width:100%;text-align: left top;}
 .pop_btm{width: 900px;margin: 0 auto;}
 .pop_btm div{height: 30px;width: 60px;border-radius: 3px;line-height: 30px;text-align: center;float: right;margin-left: 5px;cursor: pointer;}

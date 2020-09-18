@@ -22,11 +22,13 @@ package com.zyd.shiro.controller.auth;
 import com.github.pagehelper.PageInfo;
 import com.zyd.shiro.business.entity.User;
 import com.zyd.shiro.business.enums.ResponseStatus;
+import com.zyd.shiro.business.service.SysDeptService;
 import com.zyd.shiro.business.service.SysUserRoleService;
 import com.zyd.shiro.business.service.SysUserService;
 import com.zyd.shiro.business.vo.UserConditionVO;
 import com.zyd.shiro.framework.object.PageResult;
 import com.zyd.shiro.framework.object.ResponseVO;
+import com.zyd.shiro.persistence.beans.SysDept;
 import com.zyd.shiro.util.PasswordUtil;
 import com.zyd.shiro.util.ResultUtil;
 import org.apache.shiro.authz.annotation.Logical;
@@ -55,6 +57,9 @@ public class RestUserController {
     @Autowired
     private SysUserRoleService userRoleService;
 
+    @Autowired
+    private SysDeptService deptService;
+
     @RequiresPermissions("users")
     @PostMapping("/list")
     public PageResult list(UserConditionVO vo) {
@@ -75,7 +80,7 @@ public class RestUserController {
     @PostMapping("/saveUserRoles")
     public ResponseVO saveUserRoles(Long userId, String roleIds) {
         if (StringUtils.isEmpty(userId)) {
-            return ResultUtil.error("error");
+            return ResultUtil.error("请选择用户");
         }
         userRoleService.addUserRole(userId, roleIds);
         return ResultUtil.success("成功");
@@ -100,15 +105,13 @@ public class RestUserController {
 
     @RequiresPermissions(value = {"user:batchDelete", "user:delete"}, logical = Logical.OR)
     @PostMapping(value = "/remove")
-    public ResponseVO remove(Long[] ids) {
+    public ResponseVO remove(Long ids) {
         if (null == ids) {
             return ResultUtil.error(500, "请至少选择一条记录");
         }
-        for (Long id : ids) {
-            userService.removeByPrimaryKey(id);
-            userRoleService.removeByUserId(id);
-        }
-        return ResultUtil.success("成功删除 [" + ids.length + "] 个用户");
+            userService.removeByPrimaryKey(ids);
+            userRoleService.removeByUserId(ids);
+        return ResultUtil.success("成功删除个用户");
     }
 
     @RequiresPermissions("user:edit")

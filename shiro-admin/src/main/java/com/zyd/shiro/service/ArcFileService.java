@@ -3,6 +3,8 @@ package com.zyd.shiro.service;
 
 import com.github.pagehelper.PageInfo;
 import com.zyd.shiro.entity.ArcFile;
+import com.zyd.shiro.framework.object.ResponseVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +19,7 @@ import java.util.Optional;
 public interface ArcFileService {
     Optional<ArcFile> findByLevelNumber(String levelNumber);
 
-    void add(ArcFile file);
+    ArcFile add(ArcFile file);
 
     void edit(ArcFile file);
 
@@ -31,5 +33,7 @@ public interface ArcFileService {
 
     List<ArcFile> selectPageByFileNumber(String fileNumber);
 
-    void delete(long id);
+    ResponseVO delete(long id);
+
+    PageInfo<ArcFile> fullSearch(int page, int limit,String param);
 }

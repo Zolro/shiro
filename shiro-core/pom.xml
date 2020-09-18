@@ -44,10 +44,7 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
-        </dependency>
+
         <!--springboot 集成Mybatis所需jar配置 start -->
         <!--支持使用 JDBC 访问数据库 -->
         <dependency>
@@ -96,7 +93,17 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.theborakompanioni</groupId>
+            <artifactId>thymeleaf-extras-shiro</artifactId>
+            <version>${shiro.thymeleaf.extras.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -108,25 +115,6 @@
             <artifactId>shiro-redis</artifactId>
             <version>${shiro.redis.version}</version>
             <exclusions>
-                <exclusion>
-                    <artifactId>shiro-core</artifactId>
-                    <groupId>org.apache.shiro</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>net.mingsoft</groupId>
-            <artifactId>shiro-freemarker-tags</artifactId>
-            <version>${shiro.freemarker.tags.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>fastjson</artifactId>
-                    <groupId>com.alibaba</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
                 <exclusion>
                     <artifactId>shiro-core</artifactId>
                     <groupId>org.apache.shiro</groupId>

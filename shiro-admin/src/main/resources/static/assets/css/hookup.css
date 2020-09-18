@@ -15,7 +15,7 @@
 .exl_name{width: 980px;margin: 0 auto;margin: 5px auto;}
 p{font-size: 14px;color: #b6b6b6;margin: 5px 0;}
 label{cursor: pointer;}
-.hookup_bg input[type="text"]{width: 100%;margin: 0;padding: 0;line-height: 30px;}
+input[type="text"]{width: 100%;margin: 0;padding: 0;line-height: 30px;}
 .hookup_left{color: #666;width: 60px;text-align: right;float: left;font-size: 14px;margin-top: 8px;}
 .hookup_right{width: 800px;margin-left: 30px;float: left;}
 .hookup_content{margin: 20px 0;}

@@ -98,6 +98,35 @@ public class ShiroServiceImpl implements ShiroService {
     /**
      * 重新加载权限
      */
+    /*@Override
+    public void updatePermission() {
+        ShiroFilterFactoryBean shirFilter = SpringContextHolder.getBean(ShiroFilterFactoryBean.class);
+        synchronized (shirFilter) {
+            AbstractShiroFilter shiroFilter = null;
+            try {
+                shiroFilter = (AbstractShiroFilter) shirFilter.getObject();
+            } catch (Exception e) {
+                throw new RuntimeException("get ShiroFilter from shiroFilterFactoryBean error!");
+            }
+
+            PathMatchingFilterChainResolver filterChainResolver = (PathMatchingFilterChainResolver) shiroFilter.getFilterChainResolver();
+            DefaultFilterChainManager manager = (DefaultFilterChainManager) filterChainResolver.getFilterChainManager();
+
+            // 清空老的权限控制
+            manager.getFilterChains().clear();
+
+            shirFilter.getFilterChainDefinitionMap().clear();
+            shirFilter.setFilterChainDefinitionMap(loadFilterChainDefinitions());
+            // 重新构建生成
+            Map<String, String> chains = shirFilter.getFilterChainDefinitionMap();
+            for (Map.Entry<String, String> entry : chains.entrySet()) {
+                String url = entry.getKey();
+                String chainDefinition = entry.getValue().trim().replace(" ", "");
+                manager.createChain(url, chainDefinition);
+            }
+
+        }
+    }*/
     @Override
     public void updatePermission() {
         ShiroFilterFactoryBean shirFilter = SpringContextHolder.getBean(ShiroFilterFactoryBean.class);
@@ -127,7 +156,6 @@ public class ShiroServiceImpl implements ShiroService {
 
         }
     }
-
     /**
      * 重新加载用户权限
      *
