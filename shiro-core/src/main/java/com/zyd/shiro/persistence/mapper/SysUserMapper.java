@@ -44,4 +44,5 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     List<SysUser> listByRoleId(Long roleId);
 
+
 }

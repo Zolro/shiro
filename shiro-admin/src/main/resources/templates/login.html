@@ -50,9 +50,9 @@
           data: data.field,
           dataType: "json",
           success: function (rep) {
-            // console.log(rep);
+             console.log(rep);
             if (rep.status === 200) {
-              sessionStorage.setItem("authToken", rep.data);
+              sessionStorage.setItem("name", rep.data);
               $(window).attr('location', '/index');
             }else{
               layer.msg("登陆失败！");

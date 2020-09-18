@@ -35,6 +35,7 @@
         <shiro.spring.version>1.4.0</shiro.spring.version>
         <shiro.redis.version>2.4.2.1-RELEASE</shiro.redis.version>
         <shiro.thymeleaf.extras.version>2.0.0</shiro.thymeleaf.extras.version>
+        <docker.image.prefix>fileSystem</docker.image.prefix>
     </properties>
 
     <dependencies>

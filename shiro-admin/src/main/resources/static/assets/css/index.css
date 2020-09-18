@@ -10,4 +10,26 @@
 .top_active{background: #000;}
 
 .index_box{height: 100%;width: 100%;}
+.index_top_portrait{float: right;}
+
+.index_top_portrait .container{
+    padding: 20px 30px;
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+}
+.index_top_portrait .container .circle{
+    overflow: hidden;
+}
+
+.index_top_portrait .container .circle img{width: 30px;height: 30px;border-radius: 50%;}
+
+
+.index_top_portrait .container .name{
+
+    width: 80px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 

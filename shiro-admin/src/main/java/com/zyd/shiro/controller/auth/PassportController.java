@@ -20,6 +20,7 @@
 package com.zyd.shiro.controller.auth;
 
 import com.zyd.shiro.business.entity.User;
+import com.zyd.shiro.business.service.SysUserService;
 import com.zyd.shiro.entity.ArcLog;
 import com.zyd.shiro.framework.object.ResponseVO;
 import com.zyd.shiro.persistence.beans.SysUser;
@@ -55,8 +56,8 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping(value = "/passport")
 public class PassportController {
-    @Resource
-    private SysUserMapper userMapper;
+    @Autowired
+    private SysUserService userService;
 
     @Autowired
     private ArcLogService logService;
@@ -87,9 +88,10 @@ public class PassportController {
             // 在调用了login方法后,SecurityManager会收到AuthenticationToken,并将其发送给已配置的Realm执行必须的认证检查
             // 每个Realm都能在必要时对提交的AuthenticationTokens作出反应
             // 所以这一步在调用login(token)方法时,它会走到xxRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
+            User user = userService.getByUserName(username);
             currentUser.login(token);
             logService.generate("登入");
-            return ResultUtil.success("登录成功！");
+            return ResultUtil.success("登录成功！",user.getNickname());
         } catch (Exception e) {
             log.error("登录失败，用户名[{}]", username, e);
             token.clear();

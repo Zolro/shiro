@@ -26,8 +26,16 @@
 
 						<li shiro:hasPermission="authoritys" class="index_top_right_list_li"><a href="/authority" onclick="setCurrentUrl(this)" target="iframe_a">系统配置</a></li>
 
-						<li class="index_top_right_list_li"><a onclick="sessionStorage.clear('CURRENT_URL')" href="/passport/logout">退出系统</a></li>
+						<li class="index_top_right_list_li"><a onclick="sessionStorage.clear('CURRENT_URL');sessionStorage.clear('name')" href="/passport/logout">退出系统</a></li>
 					</ul>
+				</div>
+			</div>
+			<div class="index_top_portrait" style="float: right;">
+				<div class="container">
+					<div class="circle">
+						<img src="/assets/images/default.jpeg" alt="">
+					</div>
+					<div class="name"></div>
 				</div>
 			</div>
 		</div>
@@ -45,7 +53,7 @@
 <script>
 	let CURRENT_URL = sessionStorage.getItem("CURRENT_URL") ? sessionStorage.getItem("CURRENT_URL") : "/first",
 	CURRENT_PAGE_URL = sessionStorage.getItem("CURRENT_PAGE_URL") ? sessionStorage.getItem("CURRENT_PAGE_URL") : null
-
+	$(".index_top_portrait .name").text(sessionStorage.getItem("name"));
 
 	function setCurrentUrl(el) {
 		// console.log(el.href);
