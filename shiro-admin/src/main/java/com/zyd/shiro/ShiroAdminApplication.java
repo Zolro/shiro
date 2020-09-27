@@ -41,6 +41,4 @@ public class ShiroAdminApplication  {
     public static void main(String[] args) {
         SpringApplication.run(ShiroAdminApplication.class, args);
     }
-
-
 }

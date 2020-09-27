@@ -49,7 +49,7 @@ public class ArcFileTypeServiceImpl implements ArcFileTypeService {
         WeekendSqls<ArcDire> sqls = WeekendSqls.<ArcDire>custom().andEqualTo(ArcDire::getCode,fileType.getCode());
         int count = direMapper.selectCountByExample(Example.builder(ArcDire.class).where(sqls).build());
         if(count>0){
-            return ResultUtil.error("该类型档案已有下属文档，无法删除！");
+            return ResultUtil.error("该类型档案已有下级目录，无法删除！");
         }
         fileTypeMapper.deleteByPrimaryKey(id);
         return  ResultUtil.success("删除成功！");

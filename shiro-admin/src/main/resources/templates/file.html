@@ -15,7 +15,8 @@
 
 		<div class="iframe_left file_iframe_left">
 			<div class="iframe_left_list">
-				<div class="list_top">档案库列表</div>
+				<div class="list_top">档案库列表 <button type="button" id="add-one-menu" class="layui-btn  layui-btn-xs">新增目录</button></div>
+
 				<div id="side-menu"></div>
 			</div>
 		</div>
@@ -59,7 +60,8 @@
 	<!--修改节点-->
 	<div id="update-node" class="layui-fluid" style="display: none;">
 		<form class="layui-form" id="update-form" lay-filter="update-form">
-			<input type="text" name="direId" style="display:none;" class="layui-input">
+            <input type="text" name="oneId" style="display:none;" class="layui-input">
+			<input type="text" name="id" style="display:none;" class="layui-input">
 			<input type="text" name="code" style="display:none;" class="layui-input">
 			<div class="layui-form-item">
 				<label class="layui-form-label">名称</label>
@@ -67,7 +69,7 @@
 					<input type="text" name="name" class="layui-input">
 				</div>
 			</div>
-			<div class="layui-form-item">
+			<div class="layui-form-item" id="sort_menu">
 				<label class="layui-form-label">排序值</label>
 				<div class="layui-input-inline">
 					<input type="text" name="sort" class="layui-input" placeholder="请输入数字" autocomplete="off"
@@ -77,6 +79,72 @@
 			<div class="layui-form-item">
 				<div class="layui-input-block">
 					<button class="layui-btn" lay-submit lay-filter="updateNode">保存</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!--新增档案类型-->
+	<div id="add-one-node" class="layui-fluid" style="display: none;">
+		<form class="layui-form" id="add-one-form" lay-filter="add-one-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">唯一码</label>
+				<div class="layui-input-inline">
+					<input type="text" name="code" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="name" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">盒名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="boxName" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否盒模式</label>
+				<div class="layui-input-inline">
+					<select name="boxMode">
+						<option value="0">否</option>
+						<option value="1">是</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">整理模式</label>
+				<div class="layui-input-inline">
+					<select name="finisMode">
+						<option value="1">自动</option>
+						<option value="0">手动</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">档案来源</label>
+				<div class="layui-input-inline">
+					<input type="text" name="source" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注</label>
+				<div class="layui-input-inline">
+					<input type="text" name="remarks" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">创建类型</label>
+				<div class="layui-input-block">
+					<input type="radio" name="type" value="0" title="一文一件">
+					<input type="radio" name="type" value="1" title="案卷" checked>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="addOneNode">保存</button>
 				</div>
 			</div>
 		</form>
@@ -95,6 +163,7 @@
 
 		layui.use(['tree', 'jquery'], function () {
 			var tree = layui.tree;
+
 			var $ = layui.jquery;
 			//side-menu
 
@@ -115,6 +184,8 @@
 							Object.assign(el, sideMenuData[index]);
 							el.title = sideMenuData[index].name;
 							el.field = sideMenuData[index].code;
+							//树组件id不能重复
+                            el.OneId = el.id;
 							el.id = sideMenuData[index].code;
 							el.lazy = true;
 							$.ajax({
@@ -127,7 +198,7 @@
 											el.lazy = false;
 											return;
 										}
-										if (rep.data[index].whet || rep.data[index].whet == true) {
+										if (rep.data[0].whet || rep.data[0].whet == true) {
 											el.lazy = true;
 										}
 									}
@@ -137,7 +208,6 @@
 						}
 
 						// console.log(transformData);
-
 
 						var inst1 = tree.render({
 							elem: '#side-menu',
@@ -152,7 +222,7 @@
 							data: transformData,
 							text: {
 								defaultNodeName: '无数据',
-								none: '加载数据失败！'
+								none: ''
 							},
 							click: function (obj) {
 								// console.log(obj.data); //得到当前点击的节点数据
@@ -160,7 +230,7 @@
 
 								// 由于lazy 与 whet 同值，而 whet 代表 目录（true）/文件（false）
 								// 只有文件才可以点击跳转
-								if (!obj.data.lazy) {
+								if (!obj.data.lazy && !obj.data.OneId) {
 									var inner_iframe = document.getElementById("inner_iframe");
 									console.log(obj.data.id);
 									inner_iframe.src = "/biaoge?id=" + obj.data.id;
@@ -209,7 +279,7 @@
 								var type = obj.type; //得到操作类型：add、edit、del
 								var data = obj.data; //得到当前节点的数据
 								var elem = obj.elem; //得到当前节点元素
-
+                                // console.log(data)
 								if (type === 'add') { //增加节点
 									let $name = $("#add-form input[name='name']");
 									let $sort = $("#add-form input[name='sort']");
@@ -220,10 +290,12 @@
 									$sort.val('');
 									if (data.id == data.code) {
 										$code.val(data.code);
+
 										$direId.val("");
 									} else {
 										$direId.val(data.id);
-										$code.val("");
+
+										$code.val("");1
 									}
 									index0pen = layer.open({
 										type: 1,
@@ -237,15 +309,19 @@
 									let $name = $("#update-form input[name='name']");
 									let $sort = $("#update-form input[name='sort']");
 									let $code = $("#update-form input[name='code']");
-									let $direId = $("#update-form input[name='direId']");
+									let $id = $("#update-form input[name='id']");
+                                    let $oneId = $("#update-form input[name='oneId']");
 									$name.val(data.name);
 									$sort.val(data.sort);
-
+                                    $oneId.val("");
 									if (data.id == data.code) {
 										$code.val(data.code);
-										$direId.val("");
+                                        $id.val("");
+										$("#sort_menu").css("display","none")
+                                        $oneId.val(data.OneId)
 									} else {
-										$direId.val(data.id);
+                                        $id.val(data.id);
+										$("#sort_menu").css("display","block")
 										$code.val("");
 									}
 
@@ -257,38 +333,66 @@
 									});
 								} else if (type === 'del') { //删除节点
 									// 一级目录无法删除
-									if (data.id == data.code) {
-										return;
-									}
-
 									let isWhet = "目录" ;
 									let msg = "是否删除此" + isWhet + "?";
 
-									index0pen = layer.confirm(msg, { icon: 2, title: '提示' }, function (index) {
+									if (data.id == data.code) {
+										 index0pen = layer.confirm(msg, { icon: 2, title: '提示' }, function (index) {
 
-										$.ajax({
-											url: '/dire/' + data.id,
-											type: 'DELETE',
-											success: function (rep) {
-												// console.log(rep);
-												if (rep.status == 200) {
-													//关闭
-													layer.close(index0pen);
-													layer.msg('删除成功！', { icon: 1 });
-													setTimeout(function () {
-														window.location.reload();
-													}, 300);
-												} else {
-													layer.msg(rep.message, { icon: 2 });
-												}
-											},
-											error: function (error) {
-												layer.msg("错误:" + error)
-											}
-										});
+											 $.ajax({
+												 url: '/fileType/'+data.OneId,
+												 type: 'DELETE',
+												 success: function (rep) {
+													 // console.log(rep);
+													 if (rep.status == 200) {
+														 //关闭
+														 layer.close(index0pen);
+														 layer.msg('删除成功！', { icon: 1 });
+														 setTimeout(function () {
+															 window.location.reload();
+														 }, 300);
+													 } else {
+														 layer.msg(rep.message, { icon: 2 });
+													 }
+												 },
+												 error: function (error) {
+													 layer.msg("错误:" + error)
+												 }
+											 });
 
-										layer.close(index0pen);
-									})
+											 layer.close(index0pen);
+										 })
+
+									 }else{
+
+										 index0pen = layer.confirm(msg, { icon: 2, title: '提示' }, function (index) {
+
+											 $.ajax({
+												 url: '/dire/' + data.id,
+												 type: 'DELETE',
+												 success: function (rep) {
+													 // console.log(rep);
+													 if (rep.status == 200) {
+														 //关闭
+														 layer.close(index0pen);
+														 layer.msg('删除成功！', { icon: 1 });
+														 setTimeout(function () {
+															 window.location.reload();
+														 }, 300);
+													 } else {
+														 layer.msg(rep.message, { icon: 2 });
+													 }
+												 },
+												 error: function (error) {
+													 layer.msg("错误:" + error)
+												 }
+											 });
+
+											 layer.close(index0pen);
+										 })
+
+									 }
+
 
 								}
 							}
@@ -315,8 +419,6 @@
 			var tree = layui.tree;
 			//监听提交
 
-
-
 			$(document).on("click", "#add-node [lay-filter='addNode']", function () {
 				let data = form.val("add-form");
 				if (!data.code) {
@@ -330,7 +432,7 @@
 					return false;
 				}
 
-				console.log(JSON.stringify(data));
+				// console.log(JSON.stringify(data));
 				$.ajax({
 					url: "/dire",
 					type: "POST",
@@ -355,13 +457,11 @@
 			})
 
 
-			$(document).on("click", "#add-node [lay-filter='addNode']", function (){
+			$(document).on("click", "#update-node [lay-filter='updateNode']", function (){
 				let data = form.val("update-form");
 
 				if (!data.code) {
 					data.code = null;
-				} else {
-					data.direId = null;
 				}
 
 				if (!data.name) {
@@ -369,33 +469,112 @@
 					return false;
 				}
 
-				$.ajax({
-					url: "/dire",
-					type: "PUT",
-					data: data,
-					success: function (rep) {
-						if (rep.status == 200) {
+				if (data.oneId){
+				    data.id = data.oneId;
+                    delete  data.oneId;
+                    console.log(data)
+                    $.ajax({
+                        url: "/fileType",
+                        type: "PUT",
+                        data: data,
+                        success: function (rep) {
+                            if (rep.status == 200) {
+                                layer.close(index0pen);
+                                layer.msg('编辑成功！');
 
-							layer.close(index0pen);
-							layer.msg('编辑成功！');
+                                setTimeout(function () {
+                                	window.location.reload();
+                                }, 300);
+                            } else {
+                                layer.msg(rep.message);
+                            }
+                        },
+                        error: function (error) {
+                            layer.msg("错误:" + error)
+                        }
+                    })
+                }else{
+                    delete  data.code;
+                    delete  data.oneId;
+                    $.ajax({
+                        url: "/dire",
+                        type: "PUT",
+                        data: data,
+                        success: function (rep) {
+                            if (rep.status == 200) {
+                                layer.close(index0pen);
+                                layer.msg('编辑成功！');
 
-							setTimeout(function () {
-								window.location.reload();
-							}, 300);
-						} else {
-							layer.msg(rep.message);
-						}
-					},
-					error: function (error) {
-						layer.msg("错误:" + error)
-					}
-				})
+                                // setTimeout(function () {
+                                // 	window.location.reload();
+                                // }, 300);
+                            } else {
+                                layer.msg(rep.message);
+                            }
+                        },
+                        error: function (error) {
+                            layer.msg("错误:" + error)
+                        }
+                    })
+                }
+
 
 				return false;
 
 			})
 
 		});
+		layui.use(['layer','jquery','form'],function () {
+			var layer = layui.layer;
+			var $ = layui.jquery;
+			var form = layui.form;
+			$(document).on("click","#add-one-menu",function () {
+				index0pen = layer.open({
+					type: 1,
+					title: "新增档案类型",
+					shadeClose: true,
+					area: ['400px', '500px'],
+					content: $("#add-one-node"),
+				});
+			})
+
+			$(document).on("click","#add-one-form [lay-filter='addOneNode']",function () {
+				let data = form.val("add-one-form");
+
+				//唯一标识符，不能以数字开头
+				console.log(data.code.length && !isNaN(parseInt(data.code[0])))
+				if (data.code.length && !isNaN(parseInt(data.code[0]))){
+					layer.msg("唯一标识符，不能为空或以数字开头");
+					return false;
+				}else if(!data.name){
+					layer.msg("名字，不能为空");
+					return false;
+				}
+
+				$.ajax({
+					url:"/fileType",
+					type:"POST",
+					data: data,
+					success:function (rep) {
+						if (rep.status == 200){
+							layer.msg("提交成功！");
+							layer.close(index0pen);
+						}else{
+							layer.msg(rep.message);
+							layer.close(index0pen);
+						}
+						return false;
+					},
+					error:function (error) {
+						layer.msg(error);
+						layer.close(index0pen);
+						return false;
+					}
+				})
+
+				return false;
+			})
+		})
 	</script>
 </body>
 

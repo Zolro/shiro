@@ -37,12 +37,16 @@
     transform: scale(0.8);
 }
 
-.layui-tree>.layui-tree-set>.layui-tree-entry>.layui-tree-btnGroup>.layui-icon-delete{
-    display: none;
-}
+/*.layui-tree>.layui-tree-set>.layui-tree-entry>.layui-tree-btnGroup>.layui-icon-delete{*/
+/*    display: none;*/
+/*}*/
 
 .layui-tree .layui-tree-set[data-lazy="false"] .layui-tree-btnGroup>.layui-icon-add-1{
     display: none;
+}
+
+.layui-tree>.layui-tree-set>.layui-tree-entry>.layui-tree-btnGroup>.layui-icon-add-1{
+    display: inline-block;
 }
 
 #add-node{
@@ -69,4 +73,15 @@
 
 #update-node .layui-form label{
     width: 100px;
+}
+
+#add-one-node{
+    padding: 10px 0;
+}
+#add-one-node .layui-form-label{
+    width: 120px;
+}
+
+#add-one-node .layui-btn{
+    width: 115px;
 }

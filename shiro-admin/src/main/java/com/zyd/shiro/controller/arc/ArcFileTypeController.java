@@ -42,6 +42,7 @@ public class ArcFileTypeController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseVO list() {
         List<ArcFileType> fileTypes = fileTypeService.findAll();
+
         return ResultUtil.success(null,fileTypes);
     }
 

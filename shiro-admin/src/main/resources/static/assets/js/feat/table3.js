@@ -168,6 +168,8 @@ layui.use(['form', 'table', 'layer', 'jquery'], function () {
           org: data.org
         }
 
+        let orgId_tmp =  data.org;
+
         $.ajax({
           url: '/org/simple/list ',
           type: 'POST',
@@ -184,16 +186,40 @@ layui.use(['form', 'table', 'layer', 'jquery'], function () {
                 selectDom.innerHTML += `<option value="${el.id}">${el.name}</option>`
               }
 
-              INDEX_OPEN = layer.open({
-                type: 1,
-                title: "编辑用户",
-                content: $('#testForm_three'),
-                area: ["500px", "600px"],
-                success: function (layero, index) {
-                  // console.log(layero, index);
-                  form.val("testForm_form-three", INIT_DATA);
+              $.ajax({
+                url: "/dept/org/" + orgId_tmp,
+                type: "POST",
+                success: function (rep) {
+                  if (rep.status == 200) {
+                    let selectDom = $("#testForm_three [name='dept']")[0];
+                    // console.log(selectDom);
+                    selectDom.innerHTML = "";
+                    selectDom.innerHTML = '<option value="">无</option>';
+                    let data = rep.data;
+                    for (let index = 0; index < data.length; index++) {
+                      const el = data[index];
+                      selectDom.innerHTML += `<option value="${el.id}">${el.name}</option>`
+                    }
+                    form.render("select");
+                    INDEX_OPEN = layer.open({
+                      type: 1,
+                      title: "编辑用户",
+                      content: $('#testForm_three'),
+                      area: ["500px", "600px"],
+                      success: function (layero, index) {
+                        // console.log(layero, index);
+                        form.val("testForm_form-three", INIT_DATA);
+                      }
+                    })
+                  } else {
+                    layer.msg(rep.message);
+                  }
+                },
+                error: function (error) {
+                  layer.msg("错误:" + error)
                 }
               })
+
 
             } else {
               layer.msg("错误：" + rep.msg);
@@ -364,6 +390,7 @@ layui.use(['form', 'table', 'layer', 'jquery'], function () {
             const el = data[index];
             selectDom.innerHTML += `<option value="${el.id}">${el.name}</option>`
           }
+          form.render("select");
         } else {
           layer.msg(rep.message);
         }

@@ -196,7 +196,6 @@ public class ArcFileController {
     @PostMapping(value ="/fullSearch")
     public PageResult fullTextSearch(@RequestParam(required = false,defaultValue = "1") int page,@RequestParam(required = false,defaultValue = "10") int limit,@RequestParam(required = false,defaultValue = "1=1") String param) {
         return ResultUtil.tablePage(fileService.fullSearch(page,limit,param));
-
     }
 
 }

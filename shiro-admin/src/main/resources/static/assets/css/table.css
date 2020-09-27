@@ -6,8 +6,8 @@ html, body {
   height: 100%;
 }
 
-.layui-table, .layui-table-view {
-  margin: 0;
+.half_height .layui-table, .layui-table-view {
+  margin: 0!important;
 }
 
 .layui-table-tool-panel {

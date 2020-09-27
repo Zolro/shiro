@@ -1,5 +1,6 @@
 package com.zyd.shiro.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zyd.shiro.entity.ArcFileType;
 import com.zyd.shiro.framework.object.ResponseVO;
 
@@ -23,5 +24,7 @@ public interface ArcFileTypeService {
     ResponseVO delete(Long id);
 
     ResponseVO edit(ArcFileType fileType);
+
+
 
 }

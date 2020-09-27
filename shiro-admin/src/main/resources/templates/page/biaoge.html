@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/css/table.css?v=2">
+    <link rel="stylesheet" href="/assets/css/table.css?v=3">
     <link rel="stylesheet" href="/assets/js/css/layui.css">
     <title>Document</title>
 
@@ -119,8 +119,9 @@
 <script src="/assets/js/layui.js" charset="utf-8"></script>
 <script src="/assets/js/pdfobject.min.js"></script>
 <script src="/assets/js/xlsx.full.min.js"></script>
+<script src="/assets/js/pdf.js"></script>
+<script src="/assets/js/pdf.worker.js"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-
 
 <script>
     // 此为获取 应设置layui数据表格的高度
@@ -132,20 +133,25 @@
 
 <script>
     //多文件上传
-    layui.use('upload', function () {
+    var file_number = 0;
+    var sucess_upload_file_number = 0;
+    var mul_index = null;
+    layui.use(['upload','layer'], function () {
         var upload = layui.upload;
+        var layer = layui.layer;
         var demoListView = $('#multi_upload__List')
             , uploadListIns = upload.render({
             elem: '#multi_upload__select'
             , url: "/file/folder/import"
             , accept: 'file'
-            ,exts:'pdf'
+            , exts:'pdf'
             , multiple: true
             , auto: false
             , bindAction: '#multi_upload__submit'
             , choose: function (obj) {
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                console.log(files);
+                file_number++;
+
                 //读取本地文件
                 obj.preview(function (index, file, result) {
                     var tr = $(['<tr id="upload-' + index + '">'
@@ -174,15 +180,23 @@
                 });
             }
             , done: function (res, index, upload) {
-                console.log(res)
+
                 if (res.status == 200) { //上传成功
                     var tr = demoListView.find('tr#upload-' + index)
                         , tds = tr.children();
                     tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
                     tds.eq(3).html(''); //清空操作
+                    sucess_upload_file_number++;
+                    if(sucess_upload_file_number == file_number){
+                        sucess_upload_file_number = 0;
+                        file_number = 0;
+                        demoListView[0].innerHTML = "";
+                        layer.close(mul_index);
+                    }
                     return delete this.files[index]; //删除文件队列已经上传成功的文件
                 }else if(res.status == 500){
                     layer.msg("错误!"+ res.message)
+                    delete this.files[index]
                 }
                 this.error(index, upload);
             }
@@ -203,7 +217,6 @@
 
     var params_id =  [[${id}]];
     var current_fileNumber = "";
-     console.log(params_id);
     layui.use(['table', 'jquery', 'layer', 'form', 'upload'], function () {
         var table = layui.table;
         var form = layui.form;
@@ -373,16 +386,21 @@
                     });
                     break;
                 case 'upload_top':
-                    console.log(1);
                     $("#upload_top").click();
 
                     break;
                 case 'multi_upload':
-                    layer.open({
+                    mul_index = layer.open({
                         type: 1,
                         title:"多文件上传",
                         content: $('#multi_upload'),
-                        area: ["50%", "60%"]
+                        area: ["50%", "60%"],
+                        cancel: function(){
+                            sucess_upload_file_number = 0;
+                            file_number = 0;
+                            $('#multi_upload__List')[0].innerHTML = "";
+                            layer.close(mul_index);
+                        }
                     })
                     break;
             }
@@ -824,18 +842,18 @@
                         layer.msg("无文件");
                         return;
                     }
+                    var url = data.filePath.trim();
+                    var host = location.host;
+
+
                     layer.open({
                         type: 1,
                         title: data.levelNumber,
                         maxmin: true,
                         area: ["50%", "100%"],
                         content:
-                            `<div id="example1" style="height:100%"></div>
-                `,
-                        success: function () {
-                            PDFObject.embed(data.filePath.trim(), "#example1", {page: "1"});
-                            // PDFObject.embed("../pdf/test.pdf", "#example1", { page: "1" });
-                        }
+                            `<iframe src="/web/viewer.html?file=http://${host}${url}"
+                             frameborder="0" style="width:100%;height:99%;"></iframe>`,
                     });
                     break;
             }
